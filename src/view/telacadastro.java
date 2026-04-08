@@ -73,7 +73,7 @@ public class telacadastro extends JFrame {
 		JTextPane txtpnCrieUmaSenha = new JTextPane();
 		txtpnCrieUmaSenha.setBackground(new Color(0, 0, 0));
 		txtpnCrieUmaSenha.setForeground(new Color(255, 255, 255));
-		txtpnCrieUmaSenha.setText("Crie uma Senha");
+		txtpnCrieUmaSenha.setText("Criar uma Senha");
 		txtpnCrieUmaSenha.setBounds(309, 373, 120, 20);
 		contentPane.add(txtpnCrieUmaSenha);
 		
