@@ -49,7 +49,7 @@ public class telacadastro extends JFrame {
 		contentPane.setLayout(null);
 		
 		JLabel lblNewLabel = new JLabel("New label");
-		lblNewLabel.setIcon(new ImageIcon("C:\\Users\\kaua62316556\\Downloads\\image-removebg-preview.png"));
+		lblNewLabel.setIcon(new ImageIcon("images/image-removebg-preview.png"));
 		lblNewLabel.setBounds(416, 176, 340, 358);
 		contentPane.add(lblNewLabel);
 		

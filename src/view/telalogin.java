@@ -87,7 +87,7 @@ public class telalogin extends JFrame {
 		contentPane.add(txttitulo);
 		
 		JLabel lblNewLabel = new JLabel("New label");
-		lblNewLabel.setIcon(new ImageIcon("C:\\Users\\kaua62316556\\Downloads\\image-removebg-preview.png"));
+		lblNewLabel.setIcon(new ImageIcon("images/image-removebg-preview.png"));
 		lblNewLabel.setBounds(423, 198, 349, 352);
 		contentPane.add(lblNewLabel);
 		
