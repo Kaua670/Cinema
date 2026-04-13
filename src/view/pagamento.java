@@ -21,6 +21,8 @@ public class pagamento extends JFrame {
 	private String assento;
 	private JTextField txtValor;
 	private JComboBox<String> comboPagamento;
+	private JComboBox<String> comboTipoCartao;
+	private JComboBox<String> comboParcelas;
 
 	public pagamento(String filme, String horario, String assento) {
 		this.filme = filme;
@@ -29,7 +31,7 @@ public class pagamento extends JFrame {
 
 		setTitle("Pagamento");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 500, 350);
+		setBounds(100, 100, 520, 420);
 
 		contentPane = new JPanel();
 		contentPane.setLayout(null);
@@ -67,7 +69,7 @@ public class pagamento extends JFrame {
 		contentPane.add(lblValor);
 
 		txtValor = new JTextField("25.00");
-		txtValor.setBounds(140, 180, 120, 25);
+		txtValor.setBounds(180, 180, 140, 25);
 		contentPane.add(txtValor);
 
 		JLabel lblForma = new JLabel("Forma de pagamento:");
@@ -83,8 +85,71 @@ public class pagamento extends JFrame {
 		comboPagamento.setBounds(220, 220, 140, 25);
 		contentPane.add(comboPagamento);
 
+		JLabel lblTipoCartao = new JLabel("Tipo do cartão:");
+		lblTipoCartao.setForeground(Color.WHITE);
+		lblTipoCartao.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblTipoCartao.setBounds(50, 260, 140, 25);
+		contentPane.add(lblTipoCartao);
+
+		comboTipoCartao = new JComboBox<String>();
+		comboTipoCartao.addItem("Débito");
+		comboTipoCartao.addItem("Crédito");
+		comboTipoCartao.setBounds(220, 260, 140, 25);
+		comboTipoCartao.setEnabled(false);
+		contentPane.add(comboTipoCartao);
+
+		JLabel lblParcelas = new JLabel("Parcelas:");
+		lblParcelas.setForeground(Color.WHITE);
+		lblParcelas.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblParcelas.setBounds(50, 300, 140, 25);
+		contentPane.add(lblParcelas);
+
+		comboParcelas = new JComboBox<String>();
+		comboParcelas.addItem("1x sem juros");
+		comboParcelas.addItem("2x sem juros");
+		comboParcelas.addItem("3x sem juros");
+		comboParcelas.addItem("4x sem juros");
+		comboParcelas.addItem("5x sem juros");
+		comboParcelas.addItem("6x sem juros");
+		comboParcelas.setBounds(220, 300, 140, 25);
+		comboParcelas.setEnabled(false);
+		contentPane.add(comboParcelas);
+
+		comboPagamento.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String forma = comboPagamento.getSelectedItem().toString();
+
+				if (forma.equals("Cartão")) {
+					comboTipoCartao.setEnabled(true);
+
+					String tipo = comboTipoCartao.getSelectedItem().toString();
+					if (tipo.equals("Crédito")) {
+						comboParcelas.setEnabled(true);
+					} else {
+						comboParcelas.setEnabled(false);
+					}
+				} else {
+					comboTipoCartao.setEnabled(false);
+					comboParcelas.setEnabled(false);
+				}
+			}
+		});
+
+		comboTipoCartao.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String tipo = comboTipoCartao.getSelectedItem().toString();
+				String forma = comboPagamento.getSelectedItem().toString();
+
+				if (forma.equals("Cartão") && tipo.equals("Crédito")) {
+					comboParcelas.setEnabled(true);
+				} else {
+					comboParcelas.setEnabled(false);
+				}
+			}
+		});
+
 		JButton btnVoltar = new JButton("Voltar");
-		btnVoltar.setBounds(90, 270, 120, 30);
+		btnVoltar.setBounds(90, 345, 120, 30);
 		btnVoltar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				assento telaAssento = new assento(filme, horario);
@@ -95,7 +160,7 @@ public class pagamento extends JFrame {
 		contentPane.add(btnVoltar);
 
 		JButton btnFinalizar = new JButton("Finalizar");
-		btnFinalizar.setBounds(260, 270, 120, 30);
+		btnFinalizar.setBounds(260, 345, 120, 30);
 		btnFinalizar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				finalizarPagamento();
@@ -113,13 +178,28 @@ public class pagamento extends JFrame {
 			return;
 		}
 
+		String detalhes = "";
+
+		if (formaPagamento.equals("Cartão")) {
+			String tipo = comboTipoCartao.getSelectedItem().toString();
+
+			if (tipo.equals("Crédito")) {
+				String parcelas = comboParcelas.getSelectedItem().toString();
+				detalhes = "\nTipo do cartão: Crédito"
+						+ "\nParcelamento: " + parcelas;
+			} else {
+				detalhes = "\nTipo do cartão: Débito";
+			}
+		}
+
 		JOptionPane.showMessageDialog(this,
 			"Pagamento realizado com sucesso!"
 			+ "\n\nFilme: " + filme
 			+ "\nSessão: " + horario
 			+ "\nAssento: " + assento
 			+ "\nValor: R$ " + valor
-			+ "\nForma de pagamento: " + formaPagamento);
+			+ "\nForma de pagamento: " + formaPagamento
+			+ detalhes);
 
 		dispose();
 	}
