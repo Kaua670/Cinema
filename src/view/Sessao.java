@@ -1,36 +1,29 @@
 package view;
 
 import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import java.awt.BorderLayout;
-
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+import javax.swing.JLabel;
+import java.awt.Color;
+import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import java.awt.Color;
-import javax.swing.JLabel;
-import java.awt.Font;
 
 public class Sessao extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JTextField txtSesses;
+	private JTextField txtSessoes;
+	private String filme;
 
-	/**
-	 * Launch the application.
-	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Sessao frame = new Sessao();
+					Sessao frame = new Sessao("Batman");
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -39,53 +32,67 @@ public class Sessao extends JFrame {
 		});
 	}
 
-	/**
-	 * Create the frame.
-	 */
-	public Sessao() {
+	public Sessao(String filme) {
+		this.filme = filme;
+
+		setTitle("Sessões");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 500, 340);
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.BLACK);
-		contentPane.setForeground(Color.BLACK);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
-		JButton btnNewButton = new JButton("14 Horas");
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		btnNewButton.setBounds(42, 71, 89, 23);
-		contentPane.add(btnNewButton);
-		
-		JButton btnNewButton_1 = new JButton("18 Horas");
-		btnNewButton_1.setBounds(288, 71, 89, 23);
-		contentPane.add(btnNewButton_1);
-		
-		txtSesses = new JTextField();
-		txtSesses.setFont(new Font("Agency FB", Font.PLAIN, 18));
-		txtSesses.setHorizontalAlignment(SwingConstants.CENTER);
-		txtSesses.setText("Sessões");
-		txtSesses.setBounds(146, 11, 143, 39);
-		contentPane.add(txtSesses);
-		txtSesses.setColumns(10);
-		
-		JLabel lblNewLabel = new JLabel("New label");
-		lblNewLabel.setIcon(new ImageIcon("C:\\Users\\daniela62241756\\Documents\\Cinema\\images\\Vingadores.jpg"));
-		lblNewLabel.setBounds(25, 105, 143, 124);
-		contentPane.add(lblNewLabel);
-		
-		JLabel lblNewLabel_1 = new JLabel("New label");
-		lblNewLabel_1.setIcon(new ImageIcon("C:\\Users\\daniela62241756\\Documents\\Cinema\\images\\Batman.jpg"));
-		lblNewLabel_1.setBounds(260, 105, 143, 129);
-		contentPane.add(lblNewLabel_1);
-		
-		JLabel lblNewLabel_2 = new JLabel("New label");
-		lblNewLabel_2.setIcon(new ImageIcon("C:\\Users\\daniela62241756\\Documents\\Cinema\\images\\image-removebg-preview.png"));
-		lblNewLabel_2.setBounds(66, 0, 368, 265);
-		contentPane.add(lblNewLabel_2);
 
+		txtSessoes = new JTextField();
+		txtSessoes.setFont(new Font("Agency FB", Font.PLAIN, 22));
+		txtSessoes.setHorizontalAlignment(SwingConstants.CENTER);
+		txtSessoes.setText("Sessões - " + filme);
+		txtSessoes.setBounds(120, 15, 240, 35);
+		txtSessoes.setEditable(false);
+		contentPane.add(txtSessoes);
+
+		JButton btn14 = new JButton("14 Horas");
+		btn14.setBounds(60, 80, 120, 30);
+		btn14.addActionListener(e -> abrirAssento("14:00"));
+		contentPane.add(btn14);
+
+		JButton btn18 = new JButton("18 Horas");
+		btn18.setBounds(300, 80, 120, 30);
+		btn18.addActionListener(e -> abrirAssento("18:00"));
+		contentPane.add(btn18);
+
+		JButton btn20 = new JButton("20 Horas");
+		btn20.setBounds(180, 120, 120, 30);
+		btn20.addActionListener(e -> abrirAssento("20:00"));
+		contentPane.add(btn20);
+
+		JLabel lblImagem = new JLabel("");
+		lblImagem.setBounds(160, 170, 160, 100);
+
+		if (filme.equalsIgnoreCase("Vingadores")) {
+			lblImagem.setIcon(new ImageIcon("images/Vingadores.jpg"));
+		} else if (filme.equalsIgnoreCase("Batman")) {
+			lblImagem.setIcon(new ImageIcon("images/Batman.jpg"));
+		} else if (filme.equalsIgnoreCase("Toy Story")) {
+			lblImagem.setIcon(new ImageIcon("images/ToyStory.jpg"));
+		}
+
+		contentPane.add(lblImagem);
+
+		JButton btnVoltar = new JButton("Voltar");
+		btnVoltar.setBounds(20, 260, 90, 25);
+		btnVoltar.addActionListener(e -> {
+			Ingresso telaIngresso = new Ingresso();
+			telaIngresso.setVisible(true);
+			dispose();
+		});
+		contentPane.add(btnVoltar);
+	}
+
+	private void abrirAssento(String horario) {
+		assento telaAssento = new assento(filme, horario);
+		telaAssento.setVisible(true);
+		dispose();
 	}
 }
