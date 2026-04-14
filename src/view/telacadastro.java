@@ -59,12 +59,12 @@ public class telacadastro extends JFrame {
 		contentPane.add(btnVoltar);
 		
 		JLabel lblNewLabel = new JLabel("New label");
-		lblNewLabel.setIcon(new ImageIcon("C:\\Users\\kaua62316556\\Documents\\Cinema\\images\\Robô_futurista_em_um_cenário_cósmico-removebg-preview.png"));
+		lblNewLabel.setIcon(new ImageIcon("images/Robô_futurista_em_um_cenário_cósmico-removebg-preview.png"));
 		lblNewLabel.setBounds(316, 131, 430, 403);
 		contentPane.add(lblNewLabel);
 		
 		JLabel lblNewLabel_1 = new JLabel("New label");
-		lblNewLabel_1.setIcon(new ImageIcon("C:\\Users\\kaua62316556\\Documents\\Cinema\\images\\Nebulosas vibrantes no espaço profundo.png"));
+		lblNewLabel_1.setIcon(new ImageIcon("images/Nebulosas vibrantes no espaço profundo.png"));
 		lblNewLabel_1.setBounds(-21, 0, 777, 534);
 		contentPane.add(lblNewLabel_1);
 
