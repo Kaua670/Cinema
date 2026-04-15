@@ -69,7 +69,7 @@ public class Ingresso extends JFrame {
 		lblBatman.setBounds(950, 401, 150, 220);
 		lblBatman.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-		ImageIcon batmanIcon = new ImageIcon("C:\\Users\\kaua62316556\\Documents\\Cinema\\images\\Batman.jpg");
+		ImageIcon batmanIcon = new ImageIcon("images/Batman.jpg");
 		Image batmanImg = batmanIcon.getImage().getScaledInstance(150, 220, Image.SCALE_SMOOTH);
 		lblBatman.setIcon(new ImageIcon(batmanImg));
 
@@ -88,7 +88,7 @@ public class Ingresso extends JFrame {
 		lblVingadores.setBounds(616, 401, 150, 220);
 		lblVingadores.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-		ImageIcon vingadoresIcon = new ImageIcon("C:\\Users\\kaua62316556\\Documents\\Cinema\\images\\Vingadores.jpg");
+		ImageIcon vingadoresIcon = new ImageIcon("images/Vingadores.jpg");
 		Image vingadoresImg = vingadoresIcon.getImage().getScaledInstance(150, 220, Image.SCALE_SMOOTH);
 		lblVingadores.setIcon(new ImageIcon(vingadoresImg));
 
@@ -167,21 +167,21 @@ public class Ingresso extends JFrame {
 		contentPane.add(txtpnMin_2);
 		
 		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setIcon(new ImageIcon("C:\\Users\\kaua62316556\\Documents\\Cinema\\images\\Robô_futurista_em_um_cenário_cósmico-removebg-preview.png"));
+		lblNewLabel.setIcon(new ImageIcon("images/Robô_futurista_em_um_cenário_cósmico-removebg-preview.png"));
 		lblNewLabel.setBounds(1091, 498, 759, 597);
 		contentPane.add(lblNewLabel);
 		
 		JLabel lblNewLabel_1 = new JLabel("");
-		lblNewLabel_1.setIcon(new ImageIcon("C:\\Users\\kaua62316556\\Documents\\Cinema\\images\\Seleção_de_filme_em_destaque-removebg-preview.png"));
+		lblNewLabel_1.setIcon(new ImageIcon("images/Seleção_de_filme_em_destaque-removebg-preview.png"));
 		lblNewLabel_1.setBounds(567, 244, 590, 62);
 		contentPane.add(lblNewLabel_1);
 		
 		JLabel lblNewLabel_2 = new JLabel("New label");
-		lblNewLabel_2.setIcon(new ImageIcon("C:\\Users\\kaua62316556\\Documents\\Cinema\\images\\galaxy_2560x1250.png"));
+		lblNewLabel_2.setIcon(new ImageIcon("images/galaxy_2560x1250.png"));
 		lblNewLabel_2.setBounds(-23, 0, 2560, 1250);
 		contentPane.add(lblNewLabel_2);
 
-		ImageIcon icon = new ImageIcon("C:\\Users\\kaua62316556\\Documents\\Cinema\\images\\Classificação_Indicativa_12_anos.svg.png");
+		ImageIcon icon = new ImageIcon("images/Classificação_Indicativa_12_anos.svg.png");
 		Image img = icon.getImage().getScaledInstance(306, 279, Image.SCALE_SMOOTH);
 	}
 }
