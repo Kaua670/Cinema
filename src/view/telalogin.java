@@ -13,9 +13,11 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextPane;
 import javax.swing.ImageIcon;
+import javax.swing.JTable;
 
 public class telalogin extends JFrame {
 
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField textField;
 	private JPasswordField passwordField;
@@ -32,74 +34,67 @@ public class telalogin extends JFrame {
 	}
 
 	public telalogin() {
+		setTitle("Login - Cine Lumi");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 772, 573);
+		setBounds(100, 100, 1920, 1080);
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.BLACK);
 		contentPane.setLayout(null);
 		setContentPane(contentPane);
 
-		// 🌌 FUNDO
-		JLabel fundo = new JLabel();
-		fundo.setIcon(new ImageIcon("images/Nebulosas vibrantes no espaço profundo.png"));
-		fundo.setBounds(-22, 0, 778, 534);
-		contentPane.add(fundo);
-
-		// 🤖 IMAGEM
 		JLabel robo = new JLabel();
-		robo.setIcon(new ImageIcon("C:\\Users\\kaua62316556\\Documents\\Cinema\\images\\Robô_futurista_em_um_cenário_cósmico-removebg-preview.png"));
-		robo.setBounds(305, 182, 416, 389);
+		robo.setIcon(new ImageIcon("images/Robô_futurista_em_um_cenário_cósmico-removebg-preview.png"));
+		robo.setBounds(1162, 130, 1598, 1342);
 		contentPane.add(robo);
 
-		// 🎬 TÍTULO
-		JTextPane titulo = new JTextPane();
-		titulo.setText("CINE LUMI");
-		titulo.setFont(new Font("Verdana", Font.BOLD, 25));
-		titulo.setForeground(Color.WHITE);
-		titulo.setBounds(280, 100, 250, 40);
-		titulo.setOpaque(false);
-		titulo.setBorder(null);
-		contentPane.add(titulo);
-
-		// 👤 USUÁRIO
 		JTextPane usuarioTxt = new JTextPane();
+		usuarioTxt.setFont(new Font("Tahoma", Font.PLAIN, 22));
 		usuarioTxt.setText("Usuário");
 		usuarioTxt.setForeground(Color.WHITE);
-		usuarioTxt.setBounds(127, 212, 200, 25);
+		usuarioTxt.setBounds(772, 332, 200, 25);
 		usuarioTxt.setOpaque(false);
 		usuarioTxt.setBorder(null);
 		contentPane.add(usuarioTxt);
 
 		textField = new JTextField();
-		textField.setBounds(127, 241, 240, 25);
+		textField.setFont(new Font("Tahoma", Font.PLAIN, 22));
+		textField.setBounds(772, 368, 326, 40);
 		contentPane.add(textField);
 
-		// 🔒 SENHA
 		JTextPane senhaTxt = new JTextPane();
+		senhaTxt.setFont(new Font("Tahoma", Font.PLAIN, 22));
 		senhaTxt.setText("Senha");
 		senhaTxt.setForeground(Color.WHITE);
-		senhaTxt.setBounds(127, 272, 200, 25);
+		senhaTxt.setBounds(772, 419, 200, 25);
 		senhaTxt.setOpaque(false);
 		senhaTxt.setBorder(null);
 		contentPane.add(senhaTxt);
 
 		passwordField = new JPasswordField();
-		passwordField.setBounds(127, 300, 240, 25);
+		passwordField.setBounds(772, 455, 326, 40);
 		contentPane.add(passwordField);
 
-		// 🔘 BOTÕES
 		JButton btnEntrar = new JButton("Entrar");
-		btnEntrar.setBounds(127, 340, 100, 25);
+		btnEntrar.setBounds(772, 506, 155, 49);
 		contentPane.add(btnEntrar);
 
 		JButton btnCadastro = new JButton("Cadastro");
-		btnCadastro.setBounds(260, 340, 100, 25);
+		btnCadastro.setBounds(937, 506, 161, 49);
 		contentPane.add(btnCadastro);
+		
+		JLabel lblNewLabel_1 = new JLabel("\r\n");
+		lblNewLabel_1.setIcon(new ImageIcon("C:\\Users\\kaua62316556\\Documents\\Cinema\\images\\image-removebg-preview (1).png"));
+		lblNewLabel_1.setBounds(651, 116, 1279, 205);
+		contentPane.add(lblNewLabel_1);
+		
+		JLabel lblNewLabel = new JLabel("New label");
+		lblNewLabel.setIcon(new ImageIcon("C:\\Users\\kaua62316556\\Documents\\Cinema\\images\\galaxy_2560x1250.png"));
+		lblNewLabel.setBounds(-55, -135, 2774, 1459);
+		contentPane.add(lblNewLabel);
 
-		// 🔐 LOGIN + ABRIR SESSÃO
 		btnEntrar.addActionListener(e -> {
-			String usuario = textField.getText();
-			String senha = new String(passwordField.getPassword());
+			String usuario = textField.getText().trim();
+			String senha = new String(passwordField.getPassword()).trim();
 
 			if (usuario.isEmpty() || senha.isEmpty()) {
 				JOptionPane.showMessageDialog(null, "Preencha todos os campos!");
@@ -108,20 +103,19 @@ public class telalogin extends JFrame {
 
 			if (Arquivo.verificar(usuario, senha)) {
 				JOptionPane.showMessageDialog(null, "Login realizado com sucesso!");
-				new Arquivo().setVisible(true);
+
+				Ingresso telaIngresso = new Ingresso();
+				telaIngresso.setVisible(true);
+
 				dispose();
 			} else {
 				JOptionPane.showMessageDialog(null, "Usuário ou senha incorretos!");
 			}
 		});
 
-		// 🔁 IR PARA CADASTRO
 		btnCadastro.addActionListener(e -> {
 			new telacadastro().setVisible(true);
 			dispose();
 		});
-
-		// 🔧 GARANTIR FUNDO ATRÁS DE TUDO
-		contentPane.setComponentZOrder(fundo, contentPane.getComponentCount() - 1);
 	}
 }

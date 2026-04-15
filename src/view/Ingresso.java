@@ -1,6 +1,9 @@
 package view;
 
 import java.awt.EventQueue;
+import java.awt.Image;
+import java.awt.Cursor;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -15,22 +18,22 @@ import java.awt.Font;
 import javax.swing.JScrollPane;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JTextPane;
 
 public class Ingresso extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTable table;
+	private JTable table_1;
 
 	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Ingresso frame = new Ingresso();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+		EventQueue.invokeLater(() -> {
+			try {
+				Ingresso frame = new Ingresso();
+				frame.setVisible(true);
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		});
 	}
@@ -38,71 +41,147 @@ public class Ingresso extends JFrame {
 	public Ingresso() {
 		setTitle("Filmes");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 500, 320);
+		setBounds(100, 100, 1920,1080);
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.BLACK);
 		contentPane.setBorder(new EmptyBorder(5, 14, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
-		JLabel titulo = new JLabel("SELECIONE O FILME");
-		titulo.setForeground(Color.WHITE);
-		titulo.setFont(new Font("Tahoma", Font.BOLD, 18));
-		titulo.setBounds(130, 10, 220, 30);
-		contentPane.add(titulo);
-
+		// ================== TABELA ==================
 		DefaultTableModel modeloTabela = new DefaultTableModel(
 			new Object[][] {
 				{"Batman", "12 anos"},
 				{"Vingadores", "14 anos"},
-				
 			},
 			new String[] {
 				"Filme", "Classificação"
 			}
 		) {
-			private static final long serialVersionUID = 1L;
-
-			@Override
 			public boolean isCellEditable(int row, int column) {
 				return false;
 			}
 		};
 
-		table = new JTable(modeloTabela);
-		table.setRowHeight(25);
+		// ================== IMAGEM BATMAN ==================
+		JLabel lblBatman = new JLabel();
+		lblBatman.setForeground(new Color(255, 255, 255));
+		lblBatman.setBounds(950, 401, 150, 220);
+		lblBatman.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-		JScrollPane scrollPane = new JScrollPane(table);
-		scrollPane.setBounds(50, 55, 380, 140);
-		contentPane.add(scrollPane);
+		ImageIcon batmanIcon = new ImageIcon("C:\\Users\\kaua62316556\\Documents\\Cinema\\images\\Batman.jpg");
+		Image batmanImg = batmanIcon.getImage().getScaledInstance(150, 220, Image.SCALE_SMOOTH);
+		lblBatman.setIcon(new ImageIcon(batmanImg));
 
-		JButton btnEscolher = new JButton("Escolher Sessão");
-		btnEscolher.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-
-				int linha = table.getSelectedRow();
-
-				if (linha == -1) {
-					JOptionPane.showMessageDialog(btnEscolher, "Selecione um filme!");
-					return;
-				}
-
-				String filme = table.getValueAt(linha, 0).toString();
-
-				Sessao telaSessao = new Sessao(filme);
+		lblBatman.addMouseListener(new java.awt.event.MouseAdapter() {
+			public void mouseClicked(java.awt.event.MouseEvent e) {
+				Sessao telaSessao = new Sessao("Batman");
 				telaSessao.setVisible(true);
 				dispose();
 			}
 		});
-		btnEscolher.setFont(new Font("Tahoma", Font.BOLD, 13));
-		btnEscolher.setForeground(Color.WHITE);
-		btnEscolher.setBackground(new Color(128, 128, 0));
-		btnEscolher.setBounds(160, 220, 160, 30);
-		contentPane.add(btnEscolher);
 
-		JLabel logo = new JLabel("");
-		logo.setIcon(new ImageIcon("images/image-removebg-preview.png"));
-		logo.setBounds(320, 180, 140, 90);
-		contentPane.add(logo);
+		contentPane.add(lblBatman);
+
+		// ================== IMAGEM VINGADORES ==================
+		JLabel lblVingadores = new JLabel();
+		lblVingadores.setBounds(616, 401, 150, 220);
+		lblVingadores.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+		ImageIcon vingadoresIcon = new ImageIcon("C:\\Users\\kaua62316556\\Documents\\Cinema\\images\\Vingadores.jpg");
+		Image vingadoresImg = vingadoresIcon.getImage().getScaledInstance(150, 220, Image.SCALE_SMOOTH);
+		lblVingadores.setIcon(new ImageIcon(vingadoresImg));
+
+		lblVingadores.addMouseListener(new java.awt.event.MouseAdapter() {
+			public void mouseClicked(java.awt.event.MouseEvent e) {
+				Sessao telaSessao = new Sessao("Vingadores");
+				telaSessao.setVisible(true);
+				dispose();
+			}
+		});
+
+		contentPane.add(lblVingadores);
+		
+		JTextPane txtpnClassificao = new JTextPane();
+		txtpnClassificao.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		txtpnClassificao.setForeground(new Color(255, 255, 255));
+		txtpnClassificao.setText("Classificação\r\n\r\n");
+		txtpnClassificao.setBounds(630, 632, 94, 20);
+		txtpnClassificao.setOpaque(false);
+		txtpnClassificao.setBorder(null);
+		contentPane.add(txtpnClassificao);
+		
+		JTextPane txtpnClassificao_2 = new JTextPane();
+		txtpnClassificao_2.setFont(new Font("Tahoma", Font.BOLD, 16));
+		txtpnClassificao_2.setText("12+");
+		txtpnClassificao_2.setOpaque(false);
+		txtpnClassificao_2.setForeground(new Color(0, 0, 0));
+		txtpnClassificao_2.setBorder(null);
+		txtpnClassificao_2.setBounds(726, 632, 56, 20);
+		contentPane.add(txtpnClassificao_2);
+		
+		table = new JTable();
+		table.setBackground(new Color(255, 255, 0));
+		table.setBounds(720, 632, 46, 20);
+		contentPane.add(table);
+		
+		JTextPane txtpnClassificao_1 = new JTextPane();
+		txtpnClassificao_1.setText("Classificação\r\n\r\n");
+		txtpnClassificao_1.setOpaque(false);
+		txtpnClassificao_1.setForeground(Color.WHITE);
+		txtpnClassificao_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		txtpnClassificao_1.setBorder(null);
+		txtpnClassificao_1.setBounds(960, 632, 94, 20);
+		contentPane.add(txtpnClassificao_1);
+		
+		JTextPane txtpnClassificao_2_1 = new JTextPane();
+		txtpnClassificao_2_1.setText("  14+");
+		txtpnClassificao_2_1.setOpaque(false);
+		txtpnClassificao_2_1.setForeground(Color.BLACK);
+		txtpnClassificao_2_1.setFont(new Font("Tahoma", Font.BOLD, 16));
+		txtpnClassificao_2_1.setBorder(null);
+		txtpnClassificao_2_1.setBounds(1054, 632, 46, 20);
+		contentPane.add(txtpnClassificao_2_1);
+		
+		table_1 = new JTable();
+		table_1.setBackground(new Color(255, 128, 0));
+		table_1.setBounds(1060, 632, 40, 20);
+		contentPane.add(table_1);
+		
+		JTextPane txtpnMin = new JTextPane();
+		txtpnMin.setText("143 min\r\n\r\n");
+		txtpnMin.setOpaque(false);
+		txtpnMin.setForeground(Color.WHITE);
+		txtpnMin.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		txtpnMin.setBorder(null);
+		txtpnMin.setBounds(659, 663, 94, 20);
+		contentPane.add(txtpnMin);
+		
+		JTextPane txtpnMin_2 = new JTextPane();
+		txtpnMin_2.setText("152 min\r\n\r\n");
+		txtpnMin_2.setOpaque(false);
+		txtpnMin_2.setForeground(Color.WHITE);
+		txtpnMin_2.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		txtpnMin_2.setBorder(null);
+		txtpnMin_2.setBounds(997, 663, 94, 20);
+		contentPane.add(txtpnMin_2);
+		
+		JLabel lblNewLabel = new JLabel("");
+		lblNewLabel.setIcon(new ImageIcon("C:\\Users\\kaua62316556\\Documents\\Cinema\\images\\Robô_futurista_em_um_cenário_cósmico-removebg-preview.png"));
+		lblNewLabel.setBounds(1091, 498, 759, 597);
+		contentPane.add(lblNewLabel);
+		
+		JLabel lblNewLabel_1 = new JLabel("");
+		lblNewLabel_1.setIcon(new ImageIcon("C:\\Users\\kaua62316556\\Documents\\Cinema\\images\\Seleção_de_filme_em_destaque-removebg-preview.png"));
+		lblNewLabel_1.setBounds(567, 244, 590, 62);
+		contentPane.add(lblNewLabel_1);
+		
+		JLabel lblNewLabel_2 = new JLabel("New label");
+		lblNewLabel_2.setIcon(new ImageIcon("C:\\Users\\kaua62316556\\Documents\\Cinema\\images\\galaxy_2560x1250.png"));
+		lblNewLabel_2.setBounds(-23, 0, 2560, 1250);
+		contentPane.add(lblNewLabel_2);
+
+		ImageIcon icon = new ImageIcon("C:\\Users\\kaua62316556\\Documents\\Cinema\\images\\Classificação_Indicativa_12_anos.svg.png");
+		Image img = icon.getImage().getScaledInstance(306, 279, Image.SCALE_SMOOTH);
 	}
 }
