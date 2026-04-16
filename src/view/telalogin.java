@@ -47,28 +47,10 @@ public class telalogin extends JFrame {
 		robo.setBounds(1162, 130, 1598, 1342);
 		contentPane.add(robo);
 
-		JTextPane usuarioTxt = new JTextPane();
-		usuarioTxt.setFont(new Font("Tahoma", Font.PLAIN, 22));
-		usuarioTxt.setText("Usuário");
-		usuarioTxt.setForeground(Color.WHITE);
-		usuarioTxt.setBounds(772, 332, 200, 25);
-		usuarioTxt.setOpaque(false);
-		usuarioTxt.setBorder(null);
-		contentPane.add(usuarioTxt);
-
 		textField = new JTextField();
 		textField.setFont(new Font("Tahoma", Font.PLAIN, 22));
 		textField.setBounds(772, 368, 326, 40);
 		contentPane.add(textField);
-
-		JTextPane senhaTxt = new JTextPane();
-		senhaTxt.setFont(new Font("Tahoma", Font.PLAIN, 22));
-		senhaTxt.setText("Senha");
-		senhaTxt.setForeground(Color.WHITE);
-		senhaTxt.setBounds(772, 419, 200, 25);
-		senhaTxt.setOpaque(false);
-		senhaTxt.setBorder(null);
-		contentPane.add(senhaTxt);
 
 		passwordField = new JPasswordField();
 		passwordField.setBounds(772, 455, 326, 40);
@@ -83,13 +65,25 @@ public class telalogin extends JFrame {
 		contentPane.add(btnCadastro);
 		
 		JLabel lblNewLabel_1 = new JLabel("\r\n");
-		lblNewLabel_1.setIcon(new ImageIcon("C:\\Users\\kaua62316556\\Documents\\Cinema\\images\\image-removebg-preview (1).png"));
-		lblNewLabel_1.setBounds(651, 116, 1279, 205);
+		lblNewLabel_1.setIcon(new ImageIcon("images/image-removebg-preview (1).png"));
+		lblNewLabel_1.setBounds(655, 152, 1279, 205);
 		contentPane.add(lblNewLabel_1);
 		
+		JLabel lblNewLabel_2 = new JLabel("Usuario\r\n");
+		lblNewLabel_2.setFont(new Font("Tahoma", Font.PLAIN, 22));
+		lblNewLabel_2.setForeground(new Color(255, 255, 255));
+		lblNewLabel_2.setBounds(772, 326, 128, 42);
+		contentPane.add(lblNewLabel_2);
+		
+		JLabel lblNewLabel_2_1 = new JLabel("Senha");
+		lblNewLabel_2_1.setForeground(Color.WHITE);
+		lblNewLabel_2_1.setFont(new Font("Tahoma", Font.PLAIN, 22));
+		lblNewLabel_2_1.setBounds(772, 413, 128, 42);
+		contentPane.add(lblNewLabel_2_1);
+		
 		JLabel lblNewLabel = new JLabel("New label");
-		lblNewLabel.setIcon(new ImageIcon("C:\\Users\\kaua62316556\\Documents\\Cinema\\images\\galaxy_2560x1250.png"));
-		lblNewLabel.setBounds(-55, -135, 2774, 1459);
+		lblNewLabel.setIcon(new ImageIcon("images/galaxy_2560x1250.png"));
+		lblNewLabel.setBounds(-18, 0, 2560, 1250);
 		contentPane.add(lblNewLabel);
 
 		btnEntrar.addActionListener(e -> {

@@ -1,206 +1,244 @@
 package view;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JTextField;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.print.PrinterException;
 
 public class pagamento extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
+
 	private String filme;
 	private String horario;
 	private String assento;
+	private String tipo;
+
 	private JTextField txtValor;
 	private JComboBox<String> comboPagamento;
 	private JComboBox<String> comboTipoCartao;
 	private JComboBox<String> comboParcelas;
 
-	public pagamento(String filme, String horario, String assento) {
+	private JLabel PIX20;
+	private JLabel PIX30;
+
+	private JButton btnFinalizar;
+	private JButton btnConfirmarPix;
+
+	private boolean pagamentoPixConfirmado = false;
+
+	public pagamento(String filme, String horario, String assento, String tipo) {
+
 		this.filme = filme;
 		this.horario = horario;
 		this.assento = assento;
+		this.tipo = tipo;
 
 		setTitle("Pagamento");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 520, 420);
+		setBounds(100, 100, 1920, 1080);
 
 		contentPane = new JPanel();
 		contentPane.setLayout(null);
 		contentPane.setBackground(Color.BLACK);
 		setContentPane(contentPane);
 
-		JLabel lblTitulo = new JLabel("Pagamento");
-		lblTitulo.setForeground(Color.WHITE);
-		lblTitulo.setFont(new Font("Tahoma", Font.BOLD, 22));
-		lblTitulo.setBounds(180, 20, 150, 30);
-		contentPane.add(lblTitulo);
-
+		// ===== TEXTOS =====
 		JLabel lblFilme = new JLabel("Filme: " + filme);
+		lblFilme.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		lblFilme.setForeground(Color.WHITE);
-		lblFilme.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblFilme.setBounds(50, 80, 300, 25);
+		lblFilme.setBounds(655, 401, 300, 25);
 		contentPane.add(lblFilme);
 
 		JLabel lblSessao = new JLabel("Sessão: " + horario);
+		lblSessao.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		lblSessao.setForeground(Color.WHITE);
-		lblSessao.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblSessao.setBounds(50, 110, 300, 25);
+		lblSessao.setBounds(655, 437, 300, 25);
 		contentPane.add(lblSessao);
 
 		JLabel lblAssento = new JLabel("Assento: " + assento);
+		lblAssento.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		lblAssento.setForeground(Color.WHITE);
-		lblAssento.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblAssento.setBounds(50, 140, 300, 25);
+		lblAssento.setBounds(655, 473, 300, 25);
 		contentPane.add(lblAssento);
 
+		JLabel lblTipo = new JLabel("Tipo: " + tipo);
+		lblTipo.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lblTipo.setForeground(Color.WHITE);
+		lblTipo.setBounds(655, 509, 300, 25);
+		contentPane.add(lblTipo);
+
 		JLabel lblValor = new JLabel("Valor:");
+		lblValor.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		lblValor.setForeground(Color.WHITE);
-		lblValor.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblValor.setBounds(50, 180, 80, 25);
+		lblValor.setBounds(655, 545, 80, 25);
 		contentPane.add(lblValor);
 
-		txtValor = new JTextField("25.00");
-		txtValor.setBounds(180, 180, 140, 25);
+		// ===== VALOR =====
+		String valorInicial = tipo.equals("3D") ? "30.00" : "20.00";
+
+		txtValor = new JTextField(valorInicial);
+		txtValor.setBounds(718, 545, 140, 25);
+		txtValor.setEditable(false);
 		contentPane.add(txtValor);
 
-		JLabel lblForma = new JLabel("Forma de pagamento:");
-		lblForma.setForeground(Color.WHITE);
-		lblForma.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblForma.setBounds(50, 220, 160, 25);
-		contentPane.add(lblForma);
-
-		comboPagamento = new JComboBox<String>();
+		// ===== PAGAMENTO =====
+		comboPagamento = new JComboBox<>();
 		comboPagamento.addItem("Dinheiro");
 		comboPagamento.addItem("Cartão");
 		comboPagamento.addItem("PIX");
-		comboPagamento.setBounds(220, 220, 140, 25);
+		comboPagamento.setBounds(655, 631, 228, 25);
 		contentPane.add(comboPagamento);
 
-		JLabel lblTipoCartao = new JLabel("Tipo do cartão:");
-		lblTipoCartao.setForeground(Color.WHITE);
-		lblTipoCartao.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblTipoCartao.setBounds(50, 260, 140, 25);
-		contentPane.add(lblTipoCartao);
-
-		comboTipoCartao = new JComboBox<String>();
+		comboTipoCartao = new JComboBox<>();
 		comboTipoCartao.addItem("Débito");
 		comboTipoCartao.addItem("Crédito");
-		comboTipoCartao.setBounds(220, 260, 140, 25);
+		comboTipoCartao.setBounds(655, 689, 228, 25);
 		comboTipoCartao.setEnabled(false);
 		contentPane.add(comboTipoCartao);
 
-		JLabel lblParcelas = new JLabel("Parcelas:");
-		lblParcelas.setForeground(Color.WHITE);
-		lblParcelas.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblParcelas.setBounds(50, 300, 140, 25);
-		contentPane.add(lblParcelas);
-
-		comboParcelas = new JComboBox<String>();
-		comboParcelas.addItem("1x sem juros");
-		comboParcelas.addItem("2x sem juros");
-		comboParcelas.addItem("3x sem juros");
-		comboParcelas.addItem("4x sem juros");
-		comboParcelas.addItem("5x sem juros");
-		comboParcelas.addItem("6x sem juros");
-		comboParcelas.setBounds(220, 300, 140, 25);
+		comboParcelas = new JComboBox<>();
+		comboParcelas.addItem("1x");
+		comboParcelas.addItem("2x");
+		comboParcelas.addItem("3x");
+		comboParcelas.setBounds(655, 725, 228, 25);
 		comboParcelas.setEnabled(false);
 		contentPane.add(comboParcelas);
 
-		comboPagamento.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				String forma = comboPagamento.getSelectedItem().toString();
+		// ===== QR CODES =====
+		PIX20 = new JLabel();
+		PIX20.setIcon(new ImageIcon("images/WhatsApp Image 2026-04-15 at 20.52.42.jpeg"));
+		PIX20.setBounds(965, 388, 313, 319);
+		PIX20.setVisible(false);
+		contentPane.add(PIX20);
 
-				if (forma.equals("Cartão")) {
-					comboTipoCartao.setEnabled(true);
+		PIX30 = new JLabel();
+		PIX30.setIcon(new ImageIcon("images/WhatsApp Image 2026-04-15 at 20.52.48.jpeg"));
+		PIX30.setBounds(965, 347, 392, 403);
+		PIX30.setVisible(false);
+		contentPane.add(PIX30);
 
-					String tipo = comboTipoCartao.getSelectedItem().toString();
-					if (tipo.equals("Crédito")) {
-						comboParcelas.setEnabled(true);
-					} else {
-						comboParcelas.setEnabled(false);
-					}
-				} else {
-					comboTipoCartao.setEnabled(false);
-					comboParcelas.setEnabled(false);
-				}
-			}
+		// ===== BOTÕES =====
+		btnFinalizar = new JButton("Finalizar");
+		btnFinalizar.setBounds(655, 800, 133, 43);
+		btnFinalizar.addActionListener(e -> finalizarPagamento());
+		contentPane.add(btnFinalizar);
+
+		btnConfirmarPix = new JButton("Confirmar PIX");
+		btnConfirmarPix.setBounds(655, 854, 133, 43);
+		btnConfirmarPix.setVisible(false);
+
+		btnConfirmarPix.addActionListener(e -> {
+			pagamentoPixConfirmado = true;
+			btnFinalizar.setEnabled(true);
+			JOptionPane.showMessageDialog(this, "PIX confirmado!");
 		});
 
-		comboTipoCartao.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				String tipo = comboTipoCartao.getSelectedItem().toString();
-				String forma = comboPagamento.getSelectedItem().toString();
-
-				if (forma.equals("Cartão") && tipo.equals("Crédito")) {
-					comboParcelas.setEnabled(true);
-				} else {
-					comboParcelas.setEnabled(false);
-				}
-			}
-		});
+		contentPane.add(btnConfirmarPix);
 
 		JButton btnVoltar = new JButton("Voltar");
-		btnVoltar.setBounds(90, 345, 120, 30);
-		btnVoltar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				assento telaAssento = new assento(filme, horario);
-				telaAssento.setVisible(true);
-				dispose();
-			}
+		btnVoltar.setBounds(655, 965, 133, 43);
+		btnVoltar.addActionListener(e -> {
+			new assento(filme, horario, tipo).setVisible(true);
+			dispose();
 		});
 		contentPane.add(btnVoltar);
 
-		JButton btnFinalizar = new JButton("Finalizar");
-		btnFinalizar.setBounds(260, 345, 120, 30);
-		btnFinalizar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				finalizarPagamento();
+		JButton btnImprimir = new JButton("Imprimir");
+		btnImprimir.setBounds(655, 911, 133, 43);
+		btnImprimir.addActionListener(e -> imprimirRelatorio("Teste"));
+		contentPane.add(btnImprimir);
+
+		// ===== LÓGICA =====
+		comboPagamento.addActionListener(e -> {
+
+			String forma = comboPagamento.getSelectedItem().toString();
+
+			if (forma.equals("Cartão")) {
+				comboTipoCartao.setEnabled(true);
+			} else {
+				comboTipoCartao.setEnabled(false);
+				comboParcelas.setEnabled(false);
+			}
+
+			if (forma.equals("PIX")) {
+
+				pagamentoPixConfirmado = false;
+				btnFinalizar.setEnabled(false);
+				btnConfirmarPix.setVisible(true);
+
+				if (tipo.equals("2D")) {
+					PIX20.setVisible(true);
+					PIX30.setVisible(false);
+				} else {
+					PIX30.setVisible(true);
+					PIX20.setVisible(false);
+				}
+
+			} else {
+				btnFinalizar.setEnabled(true);
+				btnConfirmarPix.setVisible(false);
+				PIX20.setVisible(false);
+				PIX30.setVisible(false);
 			}
 		});
-		contentPane.add(btnFinalizar);
+
+		comboTipoCartao.addActionListener(e -> {
+			if (comboTipoCartao.getSelectedItem().equals("Crédito")) {
+				comboParcelas.setEnabled(true);
+			} else {
+				comboParcelas.setEnabled(false);
+			}
+		});
+
+		// ===== IMAGENS =====
+		JLabel img1 = new JLabel("");
+		img1.setIcon(new ImageIcon("images/image-removebg-preview (5).png"));
+		img1.setBounds(657, 221, 1279, 205);
+		contentPane.add(img1);
+
+		JLabel img2 = new JLabel("");
+		img2.setIcon(new ImageIcon("images/Robô_futurista_em_um_cenário_cósmico-removebg-preview.png"));
+		img2.setBounds(1001, 606, 535, 534);
+		contentPane.add(img2);
+
+		JLabel bg = new JLabel("");
+		bg.setIcon(new ImageIcon("images/galaxy_2560x1250.png"));
+		bg.setBounds(-23, 0, 2560, 1250);
+		contentPane.add(bg);
 	}
 
+	// ===== FINALIZAR =====
 	private void finalizarPagamento() {
-		String valor = txtValor.getText().trim();
-		String formaPagamento = comboPagamento.getSelectedItem().toString();
 
-		if (valor.equals("")) {
-			JOptionPane.showMessageDialog(this, "Informe o valor do ingresso.");
+		if (comboPagamento.getSelectedItem().equals("PIX") && !pagamentoPixConfirmado) {
+			JOptionPane.showMessageDialog(this, "Confirme o PIX primeiro!");
 			return;
 		}
 
-		String detalhes = "";
+		String relatorio =
+			"===== RELATÓRIO =====\n\n" +
+			"Filme: " + filme + "\n" +
+			"Sessão: " + horario + "\n" +
+			"Tipo: " + tipo + "\n" +
+			"Assento: " + assento + "\n" +
+			"Valor: R$ " + txtValor.getText();
 
-		if (formaPagamento.equals("Cartão")) {
-			String tipo = comboTipoCartao.getSelectedItem().toString();
+		JOptionPane.showMessageDialog(this, relatorio);
 
-			if (tipo.equals("Crédito")) {
-				String parcelas = comboParcelas.getSelectedItem().toString();
-				detalhes = "\nTipo do cartão: Crédito"
-						+ "\nParcelamento: " + parcelas;
-			} else {
-				detalhes = "\nTipo do cartão: Débito";
-			}
+		int op = JOptionPane.showConfirmDialog(this, "Deseja imprimir?");
+		if (op == JOptionPane.YES_OPTION) {
+			imprimirRelatorio(relatorio);
 		}
+	}
 
-		JOptionPane.showMessageDialog(this,
-			"Pagamento realizado com sucesso!"
-			+ "\n\nFilme: " + filme
-			+ "\nSessão: " + horario
-			+ "\nAssento: " + assento
-			+ "\nValor: R$ " + valor
-			+ "\nForma de pagamento: " + formaPagamento
-			+ detalhes);
-
-		dispose();
+	// ===== IMPRIMIR =====
+	private void imprimirRelatorio(String texto) {
+		try {
+			JTextArea area = new JTextArea(texto);
+			area.print();
+		} catch (PrinterException e) {
+			e.printStackTrace();
+		}
 	}
 }

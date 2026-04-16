@@ -17,27 +17,9 @@ public class telacadastro extends JFrame {
 		contentPane.setLayout(null);
 		setContentPane(contentPane);
 
-		JTextPane usuarioTxt = new JTextPane();
-		usuarioTxt.setFont(new Font("Tahoma", Font.PLAIN, 22));
-		usuarioTxt.setText("Usuário");
-		usuarioTxt.setForeground(Color.WHITE);
-		usuarioTxt.setBounds(772, 332, 200, 25);
-		usuarioTxt.setOpaque(false);
-		usuarioTxt.setBorder(null);
-		contentPane.add(usuarioTxt);
-
 		textField = new JTextField();
 		textField.setBounds(772, 368, 326, 40);
 		contentPane.add(textField);
-
-		JTextPane senhaTxt = new JTextPane();
-		senhaTxt.setFont(new Font("Tahoma", Font.PLAIN, 22));
-		senhaTxt.setText("Senha");
-		senhaTxt.setForeground(Color.WHITE);
-		senhaTxt.setBounds(772, 419, 200, 25);
-		senhaTxt.setOpaque(false);
-		senhaTxt.setBorder(null);
-		contentPane.add(senhaTxt);
 
 		passwordField = new JPasswordField();
 		passwordField.setBounds(772, 455, 326, 40);
@@ -57,13 +39,25 @@ public class telacadastro extends JFrame {
 		contentPane.add(lblNewLabel);
 		
 		JLabel lblNewLabel_1 = new JLabel("New label");
-		lblNewLabel_1.setIcon(new ImageIcon("C:\\Users\\kaua62316556\\Documents\\Cinema\\images\\image-removebg-preview (2).png"));
+		lblNewLabel_1.setIcon(new ImageIcon("images/image-removebg-preview (2).png"));
 		lblNewLabel_1.setBounds(650, 191, 590, 155);
 		contentPane.add(lblNewLabel_1);
 		
+		JLabel lblNewLabel_2_1 = new JLabel("Usuario\r\n");
+		lblNewLabel_2_1.setForeground(Color.WHITE);
+		lblNewLabel_2_1.setFont(new Font("Tahoma", Font.PLAIN, 22));
+		lblNewLabel_2_1.setBounds(772, 325, 128, 42);
+		contentPane.add(lblNewLabel_2_1);
+		
+		JLabel lblNewLabel_2_2 = new JLabel("Senha\r\n");
+		lblNewLabel_2_2.setForeground(Color.WHITE);
+		lblNewLabel_2_2.setFont(new Font("Tahoma", Font.PLAIN, 22));
+		lblNewLabel_2_2.setBounds(772, 408, 128, 42);
+		contentPane.add(lblNewLabel_2_2);
+		
 		JLabel lblNewLabel_2 = new JLabel("New label");
-		lblNewLabel_2.setIcon(new ImageIcon("C:\\Users\\kaua62316556\\Documents\\Cinema\\images\\galaxy_2560x1250.png"));
-		lblNewLabel_2.setBounds(-19, 0, 2560, 1250);
+		lblNewLabel_2.setIcon(new ImageIcon("images/galaxy_2560x1250.png"));
+		lblNewLabel_2.setBounds(-22, 0, 2560, 1250);
 		contentPane.add(lblNewLabel_2);
 
 		// 💾 SALVAR USUÁRIO
