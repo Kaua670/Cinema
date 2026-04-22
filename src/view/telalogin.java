@@ -95,7 +95,7 @@ public class telalogin extends JFrame {
 				return;
 			}
 
-			if (Arquivo.verificar(usuario, senha)) {
+			if (dao.UsuarioDAO.verificar(usuario, senha)) {
 				JOptionPane.showMessageDialog(null, "Login realizado com sucesso!");
 
 				Ingresso telaIngresso = new Ingresso();

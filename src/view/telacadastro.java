@@ -70,7 +70,7 @@ public class telacadastro extends JFrame {
 				return;
 			}
 
-			Arquivo.salvar(usuario, senha);
+			dao.UsuarioDAO.cadastrar(usuario, senha);
 			JOptionPane.showMessageDialog(null, "Cadastro realizado!");
 
 			new telalogin().setVisible(true);
