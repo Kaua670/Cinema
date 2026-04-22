@@ -10,7 +10,7 @@ public class UsuarioDAO {
 
         String sql = "SELECT * FROM usuarios WHERE usuario = ? AND senha = ?";
 
-        try (Connection conn = Banco.conectar();
+        try (Connection conn = Banco.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, usuario);
@@ -29,7 +29,7 @@ public class UsuarioDAO {
 
         String sql = "INSERT INTO usuarios (usuario, senha) VALUES (?, ?)";
 
-        try (Connection conn = Banco.conectar();
+        try (Connection conn = Banco.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, usuario);
@@ -39,6 +39,26 @@ public class UsuarioDAO {
 
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+    
+    public static boolean verificar1(String usuario, String senha) {
+
+        String sql = "SELECT * FROM usuarios WHERE usuario = ? AND senha = ?";
+
+        try (Connection conn = Banco.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, usuario);
+            stmt.setString(2, senha);
+
+            ResultSet rs = stmt.executeQuery();
+
+            return rs.next();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
         }
     }
 }

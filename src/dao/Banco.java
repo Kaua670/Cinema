@@ -4,23 +4,20 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 
 public class Banco {
+	
+	
+    private static final String URL = "jdbc:sqlite:BancoCinema.db";
 
-    public static void main(String[] args) {
+    public static Connection getConnection() throws Exception {
+        return DriverManager.getConnection(URL);
+    }
 
-        // CAMINHO DO BANCO
-        String url = "jdbc:sqlite:BancoCinema.db";
-
-        try {
-            Connection conn = DriverManager.getConnection(url);
-            System.out.println("Conectado com sucesso!");
+    public static void init() {
+        try (Connection conn = getConnection()) {
+            System.out.println("Banco conectado com sucesso!");
         } catch (Exception e) {
-            System.out.println("Erro ao conectar!");
+            System.err.println("Erro ao conectar no banco!");
             e.printStackTrace();
         }
     }
-
-	public static Connection conectar() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

@@ -25,6 +25,7 @@ public class telalogin extends JFrame {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(() -> {
 			try {
+				dao.Banco.init();
 				telalogin frame = new telalogin();
 				frame.setVisible(true);
 			} catch (Exception e) {
