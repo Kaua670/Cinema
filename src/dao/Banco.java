@@ -20,4 +20,13 @@ public class Banco {
             e.printStackTrace();
         }
     }
+
+	public static Connection conectar() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+
+
 }
