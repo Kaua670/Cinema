@@ -86,6 +86,10 @@ public class telalogin extends JFrame {
 		lblNewLabel.setIcon(new ImageIcon("images/galaxy_2560x1250.png"));
 		lblNewLabel.setBounds(-18, 0, 2560, 1250);
 		contentPane.add(lblNewLabel);
+		
+		JButton btnHistorico = new JButton("Histórico");
+		btnHistorico.setBounds(854, 566, 155, 49);
+		contentPane.add(btnHistorico);
 
 		btnEntrar.addActionListener(e -> {
 			String usuario = textField.getText().trim();
@@ -111,6 +115,15 @@ public class telalogin extends JFrame {
 		btnCadastro.addActionListener(e -> {
 			new telacadastro().setVisible(true);
 			dispose();
+		});
+		
+		btnHistorico.addActionListener(e -> {
+			String Historico = dao.UsuarioDAO.listarUsuarios();
+			if (Historico.isEmpty()) {
+				JOptionPane.showMessageDialog(this, "Nenhum usuário cadastrado.");
+			} else {
+				JOptionPane.showMessageDialog(this, Historico);
+			}
 		});
 	}
 }

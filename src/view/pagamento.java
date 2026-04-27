@@ -206,6 +206,8 @@ public class pagamento extends JFrame {
 		bg.setIcon(new ImageIcon("images/galaxy_2560x1250.png"));
 		bg.setBounds(-23, 0, 2560, 1250);
 		contentPane.add(bg);
+		
+		
 	}
 
 	// ===== FINALIZAR =====
@@ -230,7 +232,13 @@ public class pagamento extends JFrame {
 		if (op == JOptionPane.YES_OPTION) {
 			imprimirRelatorio(relatorio);
 		}
-	}
+		
+	  new telalogin().setVisible(true);
+	  dispose();
+		  
+		  
+	  }
+	
 
 	// ===== IMPRIMIR =====
 	private void imprimirRelatorio(String texto) {
@@ -240,5 +248,6 @@ public class pagamento extends JFrame {
 		} catch (PrinterException e) {
 			e.printStackTrace();
 		}
+
+	 }
 	}
-}

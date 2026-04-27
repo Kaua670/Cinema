@@ -150,7 +150,7 @@ public class Ingresso extends JFrame {
 		txtpn14.setForeground(Color.BLACK);
 		txtpn14.setFont(new Font("Tahoma", Font.BOLD, 16));
 		txtpn14.setBorder(null);
-		txtpn14.setBounds(1054, 632, 56, 20);
+		txtpn14.setBounds(1065, 632, 56, 20);
 		contentPane.add(txtpn14);
 
 		table_1 = new JTable();
@@ -175,10 +175,15 @@ public class Ingresso extends JFrame {
 		txtpnMin2.setBorder(null);
 		txtpnMin2.setBounds(997, 663, 94, 20);
 		contentPane.add(txtpnMin2);
-
-		JLabel fundo = new JLabel("");
-		fundo.setIcon(new ImageIcon("images/galaxy_2560x1250.png"));
-		fundo.setBounds(-23, 0, 2560, 1250);
-		contentPane.add(fundo);
+		
+		JLabel lblNewLabel = new JLabel("");
+		lblNewLabel.setIcon(new ImageIcon("images/Seleção_de_filme_em_destaque-removebg-preview.png"));
+		lblNewLabel.setBounds(575, 285, 587, 72);
+		contentPane.add(lblNewLabel);
+		
+		JLabel lblNewLabel_1 = new JLabel("New label");
+		lblNewLabel_1.setIcon(new ImageIcon("C:\\Users\\kaua62316556\\Documents\\Cinema\\images\\galaxy_2560x1250.png"));
+		lblNewLabel_1.setBounds(-20, 0, 2060, 1250);
+		contentPane.add(lblNewLabel_1);
 	}
 }

@@ -3,6 +3,7 @@ package dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 
 public class UsuarioDAO {
 
@@ -60,5 +61,27 @@ public class UsuarioDAO {
             e.printStackTrace();
             return false;
         }
+    }
+    public static String listarUsuarios() {
+    	StringBuilder lista = new StringBuilder();
+
+    	try {
+    		Connection conn = Banco.getConnection();
+    		Statement stmt = conn.createStatement();
+    		ResultSet rs = stmt.executeQuery("SELECT usuario, senha FROM usuarios");
+
+    		while (rs.next()) {
+    			lista.append("Usuário: ")
+    			     .append(rs.getString("usuario"))
+    			     .append("\nSenha: ")
+    			     .append(rs.getString("senha"))
+    			     .append("\n\n");
+    		}
+
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	}
+
+    	return lista.toString();
     }
 }
