@@ -182,7 +182,7 @@ public class Ingresso extends JFrame {
 		contentPane.add(lblNewLabel);
 		
 		JLabel lblNewLabel_1 = new JLabel("New label");
-		lblNewLabel_1.setIcon(new ImageIcon("C:\\Users\\kaua62316556\\Documents\\Cinema\\images\\galaxy_2560x1250.png"));
+		lblNewLabel_1.setIcon(new ImageIcon("images/images\\galaxy_2560x1250.png"));
 		lblNewLabel_1.setBounds(-20, 0, 2060, 1250);
 		contentPane.add(lblNewLabel_1);
 	}
