@@ -87,17 +87,16 @@ public class UsuarioDAO {
     
     public static boolean usuarioExiste(String usuario) {
 
-    	try {
-    		Connection conn = Banco.getConnection();
-    		PreparedStatement stmt = conn.prepareStatement(
-    			"SELECT * FROM usuarios WHERE usuario = ?"
-    		);
+    	String sql = "SELECT 1 FROM usuarios WHERE usuario = ?";
+
+    	try (Connection conn = Banco.getConnection();
+    	     PreparedStatement stmt = conn.prepareStatement(sql)) {
 
     		stmt.setString(1, usuario);
 
-    		ResultSet rs = stmt.executeQuery();
-
-    		return rs.next(); // true se encontrou
+    		try (ResultSet rs = stmt.executeQuery()) {
+    			return rs.next();
+    		}
 
     	} catch (Exception e) {
     		e.printStackTrace();
