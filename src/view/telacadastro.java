@@ -2,90 +2,167 @@ package view;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 
 public class telacadastro extends JFrame {
 
-	private JPanel contentPane;
-	private JTextField textField;
-	private JPasswordField passwordField;
+    private JLabel contentPane;
+    private JTextField textField;
+    private JPasswordField passwordField;
+    private JPasswordField passwordConfirmField;
 
-	public telacadastro() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1920, 1080);
-		contentPane = new JPanel();
-		contentPane.setLayout(null);
-		setContentPane(contentPane);
+    private JButton btnCadastrar;
+    private boolean modoRecuperacao = false;
 
-		textField = new JTextField();
-		textField.setBounds(772, 368, 326, 40);
-		contentPane.add(textField);
+    // 🟢 CONSTRUTOR NORMAL
+    public telacadastro() {
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setBounds(100, 100, 1920, 1080);
 
-		passwordField = new JPasswordField();
-		passwordField.setBounds(772, 455, 326, 40);
-		contentPane.add(passwordField);
+        // 🔥 FUNDO COMO CONTAINER (CORRETO)
+        JLabel fundo = new JLabel(new ImageIcon("images/galaxy_2560x1250.png"));
+        fundo.setLayout(null);
+        setContentPane(fundo);
 
-		JButton btnCadastrar = new JButton("Cadastrar");
-		btnCadastrar.setBounds(772, 506, 155, 49);
-		contentPane.add(btnCadastrar);
+        contentPane = fundo;
 
-		JButton btnVoltar = new JButton("Voltar");
-		btnVoltar.setBounds(937, 506, 161, 49);
-		contentPane.add(btnVoltar);
-		
-		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setIcon(new ImageIcon("images/Robô_futurista_em_um_cenário_cósmico-removebg-preview.png"));
-		lblNewLabel.setBounds(1162, 130, 1598, 1342);
-		contentPane.add(lblNewLabel);
-		
-		JLabel lblNewLabel_1 = new JLabel("New label");
-		lblNewLabel_1.setIcon(new ImageIcon("images/image-removebg-preview (2).png"));
-		lblNewLabel_1.setBounds(650, 191, 590, 155);
-		contentPane.add(lblNewLabel_1);
-		
-		JLabel lblNewLabel_2_1 = new JLabel("Usuario\r\n");
-		lblNewLabel_2_1.setForeground(Color.WHITE);
-		lblNewLabel_2_1.setFont(new Font("Tahoma", Font.PLAIN, 22));
-		lblNewLabel_2_1.setBounds(772, 325, 128, 42);
-		contentPane.add(lblNewLabel_2_1);
-		
-		JLabel lblNewLabel_2_2 = new JLabel("Senha\r\n");
-		lblNewLabel_2_2.setForeground(Color.WHITE);
-		lblNewLabel_2_2.setFont(new Font("Tahoma", Font.PLAIN, 22));
-		lblNewLabel_2_2.setBounds(772, 408, 128, 42);
-		contentPane.add(lblNewLabel_2_2);
-		
-		JLabel lblNewLabel_2 = new JLabel("New label");
-		lblNewLabel_2.setIcon(new ImageIcon("images/galaxy_2560x1250.png"));
-		lblNewLabel_2.setBounds(-22, 0, 2560, 1250);
-		contentPane.add(lblNewLabel_2);
+        // 👤 USUÁRIO
+        textField = new JTextField();
+        textField.setBounds(772, 368, 326, 40);
+        contentPane.add(textField);
 
-		// 💾 SALVAR USUÁRIO
-		btnCadastrar.addActionListener(e -> {
-			String usuario = textField.getText();
-			String senha = new String(passwordField.getPassword());
+        // 🔒 SENHA
+        passwordField = new JPasswordField();
+        passwordField.setBounds(772, 455, 326, 40);
+        contentPane.add(passwordField);
 
-			if (usuario.isEmpty() || senha.isEmpty()) {
-				JOptionPane.showMessageDialog(null, "Preencha todos os campos!");
-				return;
-			}
+        // 🔘 BOTÃO
+        btnCadastrar = new JButton("Cadastrar");
+        btnCadastrar.setBounds(772, 506, 155, 49);
+        contentPane.add(btnCadastrar);
 
-			// 🔥 VERIFICA SE JÁ EXISTE
-			if (dao.UsuarioDAO.usuarioExiste(usuario)) {
-				JOptionPane.showMessageDialog(null, "Usuário já cadastrado!");
+        JButton btnVoltar = new JButton("Voltar");
+        btnVoltar.setBounds(937, 506, 161, 49);
+        contentPane.add(btnVoltar);
 
-				// 👉 VOLTA PRO LOGIN
-				new telalogin().setVisible(true);
-				dispose();
-				return;
-			}
+        // 🔙 VOLTAR
+        btnVoltar.addActionListener(e -> {
+            new telalogin().setVisible(true);
+            dispose();
+        });
 
-			// 💾 CADASTRA NORMAL
-			dao.UsuarioDAO.cadastrar(usuario, senha);
-			JOptionPane.showMessageDialog(null, "Cadastro realizado!");
+        // 🔥 AÇÃO PRINCIPAL
+        btnCadastrar.addActionListener(e -> {
 
-			new telalogin().setVisible(true);
-			dispose();
-		});
-	}
+            String usuario = textField.getText();
+
+            if (usuario == null || usuario.trim().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Digite o usuário!");
+                return;
+            }
+
+            usuario = usuario.trim();
+            char[] senhaChars = passwordField.getPassword();
+
+            // 🔥 RECUPERAÇÃO
+            if (modoRecuperacao) {
+
+                char[] confirmarChars = passwordConfirmField.getPassword();
+
+                if (senhaChars.length == 0 || confirmarChars.length == 0) {
+                    JOptionPane.showMessageDialog(null, "Preencha todos os campos!");
+                    return;
+                }
+
+                String senha = new String(senhaChars);
+                String confirmar = new String(confirmarChars);
+
+                if (!senha.equals(confirmar)) {
+                    JOptionPane.showMessageDialog(null, "As senhas não coincidem!");
+                    return;
+                }
+
+                if (senha.length() < 6) {
+                    JOptionPane.showMessageDialog(null, "Senha mínima de 6 caracteres!");
+                    return;
+                }
+
+                dao.UsuarioDAO.atualizarSenha(usuario, senha);
+
+                JOptionPane.showMessageDialog(null, "Senha alterada com sucesso!");
+
+                new telalogin().setVisible(true);
+                dispose();
+                return;
+            }
+
+            // 🟢 CADASTRO
+            if (senhaChars.length == 0) {
+                JOptionPane.showMessageDialog(null, "Preencha todos os campos!");
+                return;
+            }
+
+            String senha = new String(senhaChars);
+
+            if (dao.UsuarioDAO.usuarioExiste(usuario)) {
+                JOptionPane.showMessageDialog(null, "Usuário já cadastrado!");
+                new telalogin().setVisible(true);
+                dispose();
+                return;
+            }
+
+            dao.UsuarioDAO.cadastrar(usuario, senha);
+            JOptionPane.showMessageDialog(null, "Cadastro realizado!");
+
+            new telalogin().setVisible(true);
+            dispose();
+        });
+
+        // 🎨 ELEMENTOS VISUAIS
+        JLabel robo = new JLabel();
+        robo.setIcon(new ImageIcon("images/Robô_futurista_em_um_cenário_cósmico-removebg-preview.png"));
+        robo.setBounds(1162, 130, 1598, 1342);
+        contentPane.add(robo);
+
+        JLabel titulo = new JLabel();
+        titulo.setIcon(new ImageIcon("images/image-removebg-preview (2).png"));
+        titulo.setBounds(650, 191, 590, 155);
+        contentPane.add(titulo);
+
+        JLabel lblUsuario = new JLabel("Usuario");
+        lblUsuario.setForeground(Color.WHITE);
+        lblUsuario.setFont(new Font("Tahoma", Font.PLAIN, 22));
+        lblUsuario.setBounds(772, 325, 128, 42);
+        contentPane.add(lblUsuario);
+
+        JLabel lblSenha = new JLabel("Senha");
+        lblSenha.setForeground(Color.WHITE);
+        lblSenha.setFont(new Font("Tahoma", Font.PLAIN, 22));
+        lblSenha.setBounds(772, 408, 128, 42);
+        contentPane.add(lblSenha);
+    }
+
+    // 🔥 RECUPERAÇÃO DE SENHA
+    public telacadastro(String usuario) {
+        this();
+
+        modoRecuperacao = true;
+
+        textField.setText(usuario);
+        textField.setEditable(false);
+
+        passwordField.setText("");
+
+        btnCadastrar.setText("Alterar senha");
+
+        // 🔁 CONFIRMAR SENHA
+        passwordConfirmField = new JPasswordField();
+        passwordConfirmField.setBounds(772, 590, 326, 40);
+        contentPane.add(passwordConfirmField);
+
+        JLabel lblConfirmar = new JLabel("Confirmar Senha");
+        lblConfirmar.setForeground(Color.WHITE);
+        lblConfirmar.setFont(new Font("Tahoma", Font.PLAIN, 22));
+        lblConfirmar.setBounds(772, 540, 200, 60);
+        contentPane.add(lblConfirmar);
+    }
 }

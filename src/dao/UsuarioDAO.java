@@ -7,6 +7,7 @@ import java.sql.Statement;
 
 public class UsuarioDAO {
 
+    // 🔐 LOGIN
     public static boolean verificar(String usuario, String senha) {
 
         String sql = "SELECT * FROM usuarios WHERE usuario = ? AND senha = ?";
@@ -19,13 +20,15 @@ public class UsuarioDAO {
 
             ResultSet rs = stmt.executeQuery();
 
-            return rs.next(); // se encontrou → login válido
+            return rs.next(); // encontrou = login válido
 
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
     }
+
+    // 🆕 CADASTRAR
     public static void cadastrar(String usuario, String senha) {
 
         String sql = "INSERT INTO usuarios (usuario, senha) VALUES (?, ?)";
@@ -42,16 +45,16 @@ public class UsuarioDAO {
             e.printStackTrace();
         }
     }
-    
-    public static boolean verificar1(String usuario, String senha) {
 
-        String sql = "SELECT * FROM usuarios WHERE usuario = ? AND senha = ?";
+    // 🔎 VERIFICA SE USUÁRIO EXISTE
+    public static boolean usuarioExiste(String usuario) {
+
+        String sql = "SELECT 1 FROM usuarios WHERE usuario = ?";
 
         try (Connection conn = Banco.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, usuario);
-            stmt.setString(2, senha);
 
             ResultSet rs = stmt.executeQuery();
 
@@ -59,49 +62,57 @@ public class UsuarioDAO {
 
         } catch (Exception e) {
             e.printStackTrace();
-            return false;
+        }
+
+        return false;
+    }
+
+    // 🔄 ATUALIZAR SENHA (🔥 CORREÇÃO PRINCIPAL)
+    public static void atualizarSenha(String usuario, String senha) {
+    	  System.out.println("Atualizando senha de: [" + usuario + "]");
+
+        String sql = "UPDATE usuarios SET senha = ? WHERE usuario = ?";
+
+        try (Connection conn = Banco.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, senha);
+            stmt.setString(2, usuario);
+
+            int linhas = stmt.executeUpdate();
+
+            if (linhas == 0) {
+                System.out.println("⚠️ Nenhum usuário foi atualizado!");
+            } else {
+                System.out.println("✅ Senha atualizada com sucesso!");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
+
+    // 📜 LISTAR USUÁRIOS
     public static String listarUsuarios() {
-    	StringBuilder lista = new StringBuilder();
 
-    	try {
-    		Connection conn = Banco.getConnection();
-    		Statement stmt = conn.createStatement();
-    		ResultSet rs = stmt.executeQuery("SELECT usuario, senha FROM usuarios");
+        StringBuilder lista = new StringBuilder();
 
-    		while (rs.next()) {
-    			lista.append("Usuário: ")
-    			     .append(rs.getString("usuario"))
-    			     .append("\nSenha: ")
-    			     .append(rs.getString("senha"))
-    			     .append("\n\n");
-    		}
+        try (Connection conn = Banco.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery("SELECT usuario, senha FROM usuarios")) {
 
-    	} catch (Exception e) {
-    		e.printStackTrace();
-    	}
+            while (rs.next()) {
+                lista.append("Usuário: ")
+                     .append(rs.getString("usuario"))
+                     .append("\nSenha: ")
+                     .append(rs.getString("senha"))
+                     .append("\n\n");
+            }
 
-    	return lista.toString();
-    }
-    
-    public static boolean usuarioExiste(String usuario) {
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-    	String sql = "SELECT 1 FROM usuarios WHERE usuario = ?";
-
-    	try (Connection conn = Banco.getConnection();
-    	     PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-    		stmt.setString(1, usuario);
-
-    		try (ResultSet rs = stmt.executeQuery()) {
-    			return rs.next();
-    		}
-
-    	} catch (Exception e) {
-    		e.printStackTrace();
-    	}
-
-    	return false;
+        return lista.toString();
     }
 }
