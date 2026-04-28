@@ -233,7 +233,7 @@ public class pagamento extends JFrame {
 			imprimirRelatorio(relatorio);
 		}
 		
-	  new telalogin().setVisible(true);
+	  new Ingresso().setVisible(true);
 	  dispose();
 		  
 		  

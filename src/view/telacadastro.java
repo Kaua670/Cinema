@@ -70,15 +70,20 @@ public class telacadastro extends JFrame {
 				return;
 			}
 
+			// 🔥 VERIFICA SE JÁ EXISTE
+			if (dao.UsuarioDAO.usuarioExiste(usuario)) {
+				JOptionPane.showMessageDialog(null, "Usuário já cadastrado!");
+
+				// 👉 VOLTA PRO LOGIN
+				new telalogin().setVisible(true);
+				dispose();
+				return;
+			}
+
+			// 💾 CADASTRA NORMAL
 			dao.UsuarioDAO.cadastrar(usuario, senha);
 			JOptionPane.showMessageDialog(null, "Cadastro realizado!");
 
-			new telalogin().setVisible(true);
-			dispose();
-		});
-
-		// 🔁 VOLTAR
-		btnVoltar.addActionListener(e -> {
 			new telalogin().setVisible(true);
 			dispose();
 		});

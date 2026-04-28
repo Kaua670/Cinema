@@ -84,4 +84,25 @@ public class UsuarioDAO {
 
     	return lista.toString();
     }
+    
+    public static boolean usuarioExiste(String usuario) {
+
+    	try {
+    		Connection conn = Banco.getConnection();
+    		PreparedStatement stmt = conn.prepareStatement(
+    			"SELECT * FROM usuarios WHERE usuario = ?"
+    		);
+
+    		stmt.setString(1, usuario);
+
+    		ResultSet rs = stmt.executeQuery();
+
+    		return rs.next(); // true se encontrou
+
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	}
+
+    	return false;
+    }
 }
