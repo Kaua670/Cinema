@@ -41,10 +41,36 @@ public class UsuarioDAO {
 
             stmt.executeUpdate();
 
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	}
+    }
+        
+    public static boolean Administrador(String usuario, String senha) {
+
+        String sql = "SELECT * FROM Administrador WHERE usuarioAdm = ? AND senhaAdm = ?";
+
+        try (Connection conn = Banco.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, usuario);
+            stmt.setString(2, senha);
+
+            ResultSet rs = stmt.executeQuery();
+
+            return rs.next();
+
         } catch (Exception e) {
             e.printStackTrace();
+            return false;
         }
     }
+        		
+        	
+        			
+        	
+
+    
 
     // 🔎 VERIFICA SE USUÁRIO EXISTE
     public static boolean usuarioExiste(String usuario) {

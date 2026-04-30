@@ -7,6 +7,9 @@ import java.awt.Font;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
+import dao.UsuarioDAO;
+
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -116,7 +119,31 @@ public class telalogin extends JFrame {
 				telaIngresso.setVisible(true);
 
 				dispose();
-			} else {
+				
+			
+			} // 🔥 ADMIN FIXO
+			if (usuario.equals("adm01") && senha.equals("999999")) {
+
+			    JOptionPane.showMessageDialog(null, "Login como ADMIN!");
+
+			    new Administrador().setVisible(true);
+			    dispose();
+
+			} 
+			
+			if (UsuarioDAO.Administrador(usuario, senha)) {
+			    new Administrador().setVisible(true);
+			}
+			
+			else if (dao.UsuarioDAO.verificar(usuario, senha)) {
+
+			    JOptionPane.showMessageDialog(null, "Login normal!");
+
+			    new Ingresso().setVisible(true);
+			    dispose();
+
+			} 		
+			else {
 				JOptionPane.showMessageDialog(null, "Usuário ou senha incorretos!");
 			}
 		});
