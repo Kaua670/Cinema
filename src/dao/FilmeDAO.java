@@ -7,20 +7,23 @@ import java.util.ArrayList;
 
 public class FilmeDAO {
 
+    // 🎬 LISTAR FILMES (AGORA COM IMAGEM)
     public static ArrayList<String[]> listarFilmes() {
 
         ArrayList<String[]> lista = new ArrayList<>();
 
-        String sql = "SELECT nome, classificacao FROM filmes";
+        String sql = "SELECT nome, classificacao, imagem FROM filmes";
 
-        try (Connection conn = Banco.conectar();
+        try (Connection conn = Banco.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
+
                 lista.add(new String[]{
                     rs.getString("nome"),
-                    rs.getString("classificacao")
+                    rs.getString("classificacao"),
+                    rs.getString("imagem") // 🖼️ caminho da imagem
                 });
             }
 
@@ -29,5 +32,64 @@ public class FilmeDAO {
         }
 
         return lista;
+    }
+
+    // 🆕 CADASTRAR FILME
+    public static void adicionarFilme(String nome, String classificacao, String imagem) {
+
+        String sql = "INSERT INTO filmes (nome, classificacao, imagem) VALUES (?, ?, ?)";
+
+        try (Connection conn = Banco.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, nome);
+            stmt.setString(2, classificacao);
+            stmt.setString(3, imagem);
+
+            stmt.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // 🗑️ EXCLUIR FILME
+    public static boolean excluirFilme(String nome) {
+
+        String sql = "DELETE FROM filmes WHERE nome = ?";
+
+        try (Connection conn = Banco.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, nome);
+
+            int linhas = stmt.executeUpdate();
+
+            return linhas > 0; // true se excluiu
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    // 🔍 VERIFICA SE FILME EXISTE (OPCIONAL, MAS ÚTIL)
+    public static boolean filmeExiste(String nome) {
+
+        String sql = "SELECT 1 FROM filmes WHERE nome = ?";
+
+        try (Connection conn = Banco.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, nome);
+
+            ResultSet rs = stmt.executeQuery();
+
+            return rs.next();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

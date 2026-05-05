@@ -7,6 +7,7 @@ import java.awt.Font;
 import javax.swing.*;
 
 import dao.UsuarioDAO;
+import dao.Banco;
 
 public class telalogin extends JFrame {
 
@@ -18,7 +19,7 @@ public class telalogin extends JFrame {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(() -> {
 			try {
-				dao.Banco.init();
+				Banco.init(); // 🔥 inicia banco
 				telalogin frame = new telalogin();
 				frame.setVisible(true);
 			} catch (Exception e) {
@@ -28,12 +29,15 @@ public class telalogin extends JFrame {
 	}
 
 	public telalogin() {
+
+		// 🔥 garante banco/tabelas
+		Banco.init();
+
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setTitle("Login - Cine Lumi");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1920, 1080);
 
-		// 🔥 FUNDO COMO CONTAINER
 		JLabel fundo = new JLabel(new ImageIcon("images/galaxy_2560x1250.png"));
 		fundo.setLayout(null);
 		setContentPane(fundo);
@@ -56,7 +60,7 @@ public class telalogin extends JFrame {
 		btnEntrar.setBounds(772, 506, 155, 49);
 		contentPane.add(btnEntrar);
 
-		// 🆕 BOTÃO CADASTRO
+		// 🆕 CADASTRO
 		JButton btnCadastro = new JButton("Cadastro");
 		btnCadastro.setBounds(937, 506, 161, 49);
 		contentPane.add(btnCadastro);
@@ -92,8 +96,9 @@ public class telalogin extends JFrame {
 		lblSenha.setFont(new Font("Tahoma", Font.PLAIN, 22));
 		contentPane.add(lblSenha);
 
-		// 🔐 LOGIN MELHORADO
+		// 🔥 LOGIN CORRIGIDO
 		btnEntrar.addActionListener(e -> {
+
 			String usuario = textField.getText().trim();
 			String senha = new String(passwordField.getPassword()).trim();
 
@@ -102,21 +107,22 @@ public class telalogin extends JFrame {
 				return;
 			}
 
-			// 🔍 USUÁRIO EXISTE?
+			// ✅ ADMIN FIXO PRIMEIRO (CORREÇÃO)
+			if (usuario.equals("adm01") && senha.equals("141516")) {
+				JOptionPane.showMessageDialog(null, "Login como ADMIN!");
+				new Administrador().setVisible(true);
+				dispose();
+				return;
+			}
+
+			// 🔍 VERIFICA NO BANCO
 			if (!UsuarioDAO.usuarioExiste(usuario)) {
 				JOptionPane.showMessageDialog(null, "Usuário não existe!");
 				return;
 			}
 
-			// 🔥 ADMIN FIXO
-			if (usuario.equals("adm01") && senha.equals("999999")) {
-				JOptionPane.showMessageDialog(null, "Login como ADMIN!");
-				new Administrador().setVisible(true);
-				dispose();
-			}
-
 			// 🔐 ADMIN DO BANCO
-			else if (UsuarioDAO.Administrador(usuario, senha)) {
+			if (UsuarioDAO.Administrador(usuario, senha)) {
 				JOptionPane.showMessageDialog(null, "Login como ADMIN!");
 				new Administrador().setVisible(true);
 				dispose();
@@ -141,8 +147,9 @@ public class telalogin extends JFrame {
 			dispose();
 		});
 
-		// 🔥 RECUPERAÇÃO DE SENHA
+		// 🔥 RECUPERAÇÃO
 		btnEsqueciASenha.addActionListener(e -> {
+
 			String usuario = textField.getText().trim();
 
 			if (usuario.isEmpty()) {

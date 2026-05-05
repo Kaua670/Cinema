@@ -11,6 +11,7 @@ public class telacadastro extends JFrame {
     private JPasswordField passwordConfirmField;
 
     private JButton btnCadastrar;
+    private JButton btnVoltar; // 🔥 AGORA É GLOBAL
     private boolean modoRecuperacao = false;
 
     public telacadastro() {
@@ -34,12 +35,13 @@ public class telacadastro extends JFrame {
         passwordField.setBounds(772, 430, 326, 40);
         contentPane.add(passwordField);
 
-        // 🔘 BOTÕES
+        // 🔘 BOTÃO CADASTRAR
         btnCadastrar = new JButton("Cadastrar");
         btnCadastrar.setBounds(772, 500, 155, 49);
         contentPane.add(btnCadastrar);
 
-        JButton btnVoltar = new JButton("Voltar");
+        // 🔘 BOTÃO VOLTAR (AGORA GLOBAL)
+        btnVoltar = new JButton("Voltar");
         btnVoltar.setBounds(937, 500, 161, 49);
         contentPane.add(btnVoltar);
 
@@ -109,10 +111,10 @@ public class telacadastro extends JFrame {
             if (dao.UsuarioDAO.usuarioExiste(usuario)) {
 
                 int opcao = JOptionPane.showConfirmDialog(
-                    null,
-                    "Usuário já existe! Deseja ir para o login?",
-                    "Usuário existente",
-                    JOptionPane.YES_NO_OPTION
+                        null,
+                        "Usuário já existe! Deseja ir para o login?",
+                        "Usuário existente",
+                        JOptionPane.YES_NO_OPTION
                 );
 
                 if (opcao == JOptionPane.YES_OPTION) {
@@ -156,7 +158,7 @@ public class telacadastro extends JFrame {
         contentPane.add(lblSenha);
     }
 
-    // 🔥 RECUPERAÇÃO
+    // 🔥 RECUPERAÇÃO DE SENHA
     public telacadastro(String usuario) {
         this();
 
@@ -178,6 +180,8 @@ public class telacadastro extends JFrame {
         lblConfirmar.setBounds(772, 470, 200, 40);
         contentPane.add(lblConfirmar);
 
+        // 🔥 REPOSICIONA BOTÕES LADO A LADO
         btnCadastrar.setBounds(772, 570, 155, 49);
+        btnVoltar.setBounds(937, 570, 161, 49);
     }
 }
