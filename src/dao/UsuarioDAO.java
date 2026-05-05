@@ -141,4 +141,23 @@ public class UsuarioDAO {
 
         return lista.toString();
     }
+    
+    public static boolean excluirUsuario(String usuario) {
+
+        String sql = "DELETE FROM usuarios WHERE usuario = ?";
+
+        try (Connection conn = Banco.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, usuario);
+
+            int linhas = stmt.executeUpdate();
+
+            return linhas > 0; // true se deletou
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

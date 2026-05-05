@@ -4,22 +4,14 @@ import java.awt.EventQueue;
 import java.awt.Color;
 import java.awt.Font;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.*;
 
 import dao.UsuarioDAO;
-
-import javax.swing.JPasswordField;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.ImageIcon;
 
 public class telalogin extends JFrame {
 
 	private static final long serialVersionUID = 1L;
-	private JPanel contentPane;
+	private JLabel contentPane;
 	private JTextField textField;
 	private JPasswordField passwordField;
 
@@ -40,15 +32,13 @@ public class telalogin extends JFrame {
 		setTitle("Login - Cine Lumi");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1920, 1080);
-		contentPane = new JPanel();
-		contentPane.setBackground(Color.BLACK);
-		setContentPane(contentPane);
-		contentPane.setLayout(null);
 
-		JLabel robo = new JLabel();
-		robo.setBounds(1162, 130, 1598, 1342);
-		robo.setIcon(new ImageIcon("images/Robô_futurista_em_um_cenário_cósmico-removebg-preview.png"));
-		contentPane.add(robo);
+		// 🔥 FUNDO COMO CONTAINER
+		JLabel fundo = new JLabel(new ImageIcon("images/galaxy_2560x1250.png"));
+		fundo.setLayout(null);
+		setContentPane(fundo);
+
+		contentPane = fundo;
 
 		// 👤 USUÁRIO
 		textField = new JTextField();
@@ -71,39 +61,38 @@ public class telalogin extends JFrame {
 		btnCadastro.setBounds(937, 506, 161, 49);
 		contentPane.add(btnCadastro);
 
-		// 📜 HISTÓRICO
-		JButton btnHistorico = new JButton("Histórico");
-		btnHistorico.setBounds(772, 565, 155, 49);
-		contentPane.add(btnHistorico);
-
 		// 🔥 ESQUECI SENHA
 		JButton btnEsqueciASenha = new JButton("Esqueci a senha");
-		btnEsqueciASenha.setBounds(937, 565, 161, 49);
+		btnEsqueciASenha.setBounds(772, 565, 326, 49);
 		contentPane.add(btnEsqueciASenha);
 
+		// 🤖 IMAGEM
+		JLabel robo = new JLabel();
+		robo.setBounds(1162, 130, 1598, 1342);
+		robo.setIcon(new ImageIcon("images/Robô_futurista_em_um_cenário_cósmico-removebg-preview.png"));
+		contentPane.add(robo);
+
+		// 🏷️ TÍTULO
 		JLabel titulo = new JLabel();
 		titulo.setBounds(655, 152, 1279, 205);
 		titulo.setIcon(new ImageIcon("images/image-removebg-preview (1).png"));
 		contentPane.add(titulo);
 
+		// LABEL USUARIO
 		JLabel lblUsuario = new JLabel("Usuario");
 		lblUsuario.setBounds(772, 326, 128, 42);
 		lblUsuario.setFont(new Font("Tahoma", Font.PLAIN, 22));
 		lblUsuario.setForeground(Color.WHITE);
 		contentPane.add(lblUsuario);
 
+		// LABEL SENHA
 		JLabel lblSenha = new JLabel("Senha");
 		lblSenha.setBounds(772, 413, 128, 42);
 		lblSenha.setForeground(Color.WHITE);
 		lblSenha.setFont(new Font("Tahoma", Font.PLAIN, 22));
 		contentPane.add(lblSenha);
 
-		JLabel fundo = new JLabel();
-		fundo.setBounds(-18, 0, 2560, 1250);
-		fundo.setIcon(new ImageIcon("images/galaxy_2560x1250.png"));
-		contentPane.add(fundo);
-
-		// 🔐 LOGIN
+		// 🔐 LOGIN MELHORADO
 		btnEntrar.addActionListener(e -> {
 			String usuario = textField.getText().trim();
 			String senha = new String(passwordField.getPassword()).trim();
@@ -113,60 +102,46 @@ public class telalogin extends JFrame {
 				return;
 			}
 
-			if (dao.UsuarioDAO.verificar(usuario, senha)) {
-				JOptionPane.showMessageDialog(null, "Login realizado com sucesso!");
-
-				Ingresso telaIngresso = new Ingresso();
-				telaIngresso.setVisible(true);
-
-				dispose();
-				
-			
-			} // 🔥 ADMIN FIXO
-			if (usuario.equals("adm01") && senha.equals("999999")) {
-
-			    JOptionPane.showMessageDialog(null, "Login como ADMIN!");
-
-			    new Administrador().setVisible(true);
-			    dispose();
-
-			} 
-			
-			if (UsuarioDAO.Administrador(usuario, senha)) {
-			    new Administrador().setVisible(true);
+			// 🔍 USUÁRIO EXISTE?
+			if (!UsuarioDAO.usuarioExiste(usuario)) {
+				JOptionPane.showMessageDialog(null, "Usuário não existe!");
+				return;
 			}
-			
-			else if (dao.UsuarioDAO.verificar(usuario, senha)) {
 
-			    JOptionPane.showMessageDialog(null, "Login normal!");
+			// 🔥 ADMIN FIXO
+			if (usuario.equals("adm01") && senha.equals("999999")) {
+				JOptionPane.showMessageDialog(null, "Login como ADMIN!");
+				new Administrador().setVisible(true);
+				dispose();
+			}
 
-			    new Ingresso().setVisible(true);
-			    dispose();
+			// 🔐 ADMIN DO BANCO
+			else if (UsuarioDAO.Administrador(usuario, senha)) {
+				JOptionPane.showMessageDialog(null, "Login como ADMIN!");
+				new Administrador().setVisible(true);
+				dispose();
+			}
 
-			} 		
+			// 👤 USUÁRIO NORMAL
+			else if (UsuarioDAO.verificar(usuario, senha)) {
+				JOptionPane.showMessageDialog(null, "Login realizado com sucesso!");
+				new Ingresso().setVisible(true);
+				dispose();
+			}
+
+			// ❌ SENHA ERRADA
 			else {
-				JOptionPane.showMessageDialog(null, "Usuário ou senha incorretos!");
+				JOptionPane.showMessageDialog(null, "Senha incorreta!");
 			}
 		});
 
-		// 🆕 IR PARA CADASTRO
+		// 🆕 CADASTRO
 		btnCadastro.addActionListener(e -> {
 			new telacadastro().setVisible(true);
 			dispose();
 		});
 
-		// 📜 HISTÓRICO
-		btnHistorico.addActionListener(e -> {
-			String historico = dao.UsuarioDAO.listarUsuarios();
-
-			if (historico.isEmpty()) {
-				JOptionPane.showMessageDialog(this, "Nenhum usuário cadastrado.");
-			} else {
-				JOptionPane.showMessageDialog(this, historico);
-			}
-		});
-
-		// 🔥 ESQUECI SENHA (CORRIGIDO)
+		// 🔥 RECUPERAÇÃO DE SENHA
 		btnEsqueciASenha.addActionListener(e -> {
 			String usuario = textField.getText().trim();
 
@@ -175,13 +150,11 @@ public class telalogin extends JFrame {
 				return;
 			}
 
-			// 🔎 Verifica se existe
-			if (!dao.UsuarioDAO.usuarioExiste(usuario)) {
+			if (!UsuarioDAO.usuarioExiste(usuario)) {
 				JOptionPane.showMessageDialog(null, "Usuário não encontrado!");
 				return;
 			}
 
-			// 🔥 Abre recuperação
 			new telacadastro(usuario).setVisible(true);
 			dispose();
 		});

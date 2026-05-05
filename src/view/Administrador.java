@@ -30,13 +30,20 @@ public class Administrador extends JFrame {
 
 	public Administrador() {
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
-
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1920, 1080);
 
 		contentPane = new JPanel();
 		contentPane.setLayout(null);
+		contentPane.setBackground(Color.BLACK);
 		setContentPane(contentPane);
+
+		// 🔥 TÍTULO
+		JLabel titulo = new JLabel("PAINEL ADMINISTRADOR");
+		titulo.setFont(new Font("Verdana", Font.BOLD, 28));
+		titulo.setForeground(Color.WHITE);
+		titulo.setBounds(650, 80, 500, 50);
+		contentPane.add(titulo);
 
 		// 🔥 LISTA TEMPORÁRIA
 		Set<String> assentosTemp = new HashSet<>(ControlerAssento.assentosBloqueados);
@@ -54,7 +61,7 @@ public class Administrador extends JFrame {
 		lbl2.setBounds(964, 185, 172, 35);
 		contentPane.add(lbl2);
 
-		// CAMPOS COM VALORES ATUAIS
+		// CAMPOS
 		textField = new JTextField(String.valueOf(ControlePreco.preco2D));
 		textField.setBounds(671, 219, 200, 34);
 		contentPane.add(textField);
@@ -102,18 +109,16 @@ public class Administrador extends JFrame {
 			painelAssentos.add(btn);
 		}
 
-		// 🔥 BOTÃO SALVAR (ASSENTOS + PREÇOS)
+		// 🔥 BOTÃO SALVAR
 		JButton btnSalvar = new JButton("Salvar");
-		btnSalvar.setBounds(671, 577, 200, 50);
+		btnSalvar.setBounds(600, 600, 180, 50);
 
 		btnSalvar.addActionListener(e -> {
 
-			// salva assentos
 			ControlerAssento.assentosBloqueados.clear();
 			ControlerAssento.assentosBloqueados.addAll(assentosTemp);
 
 			try {
-				// salva preços
 				double preco2D = Double.parseDouble(textField.getText());
 				double preco3D = Double.parseDouble(textField_1.getText());
 
@@ -129,13 +134,86 @@ public class Administrador extends JFrame {
 
 		contentPane.add(btnSalvar);
 
-		// VOLTAR
+		// 🔥 HISTÓRICO
+		JButton btnHistorico = new JButton("Histórico");
+		btnHistorico.setBounds(800, 600, 180, 50);
+
+		btnHistorico.addActionListener(e -> {
+			String historico = dao.UsuarioDAO.listarUsuarios();
+
+			if (historico.isEmpty()) {
+				JOptionPane.showMessageDialog(this, "Nenhum usuário cadastrado.");
+			} else {
+				JTextArea area = new JTextArea(historico);
+				area.setEditable(false);
+				area.setLineWrap(true);
+				area.setWrapStyleWord(true);
+
+				JScrollPane scroll = new JScrollPane(area);
+				scroll.setPreferredSize(new java.awt.Dimension(500, 300));
+
+				JOptionPane.showMessageDialog(this, scroll, "Histórico de Usuários", JOptionPane.INFORMATION_MESSAGE);
+			}
+		});
+
+		contentPane.add(btnHistorico);
+
+		// 🔙 VOLTAR
 		JButton btnVoltar = new JButton("Voltar");
-		btnVoltar.setBounds(929, 577, 200, 50);
+		btnVoltar.setBounds(1000, 600, 180, 50);
+
 		btnVoltar.addActionListener(e -> {
 			new telalogin().setVisible(true);
 			dispose();
 		});
+
 		contentPane.add(btnVoltar);
+
+		// 🗑️ EXCLUIR USUÁRIO
+		JLabel lblExcluir = new JLabel("Excluir Usuário:");
+		lblExcluir.setBounds(650, 680, 200, 30);
+		lblExcluir.setForeground(Color.WHITE);
+		contentPane.add(lblExcluir);
+
+		JTextField campoExcluir = new JTextField();
+		campoExcluir.setBounds(650, 710, 300, 40);
+		contentPane.add(campoExcluir);
+
+		JButton btnExcluir = new JButton("Excluir");
+		btnExcluir.setBounds(970, 710, 150, 40);
+		contentPane.add(btnExcluir);
+
+		btnExcluir.addActionListener(e -> {
+
+			String usuario = campoExcluir.getText().trim();
+
+			if (usuario.isEmpty()) {
+				JOptionPane.showMessageDialog(null, "Digite o usuário para excluir!");
+				return;
+			}
+
+			// 🔒 PROTEGE ADMIN FIXO
+			if (usuario.equals("adm01")) {
+				JOptionPane.showMessageDialog(null, "Não é possível excluir o admin principal!");
+				return;
+			}
+
+			int confirmacao = JOptionPane.showConfirmDialog(
+				null,
+				"Tem certeza que deseja excluir o usuário: " + usuario + "?",
+				"Confirmação",
+				JOptionPane.YES_NO_OPTION
+			);
+
+			if (confirmacao == JOptionPane.YES_OPTION) {
+
+				if (dao.UsuarioDAO.excluirUsuario(usuario)) {
+					JOptionPane.showMessageDialog(null, "Usuário excluído com sucesso!");
+					campoExcluir.setText("");
+				} else {
+					JOptionPane.showMessageDialog(null, "Usuário não encontrado!");
+				}
+			}
+		});
 	}
 }
