@@ -2,6 +2,9 @@ package view;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
+import Controle.ControlerAssento;
+
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JButton;
@@ -11,6 +14,7 @@ import java.awt.GridLayout;
 import javax.swing.ImageIcon;
 
 public class assento extends JFrame {
+	
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -18,10 +22,11 @@ public class assento extends JFrame {
 	private String horario;
 	private String tipo;
 
-	private String assentoSelecionado = null; // 🔥 começa NULL
+	private String assentoSelecionado = null;
 	private JButton assentoSelecionadoBtn = null;
 
 	public assento(String filme, String horario, String tipoSelecionado) {
+		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		this.filme = filme;
 		this.horario = horario;
 		this.tipo = tipoSelecionado;
@@ -34,6 +39,9 @@ public class assento extends JFrame {
 		contentPane.setLayout(null);
 		contentPane.setBackground(Color.BLACK);
 		setContentPane(contentPane);
+
+		// 🔍 DEBUG (veja no console)
+		System.out.println("Assentos bloqueados: " + ControlerAssento.assentosBloqueados);
 
 		JLabel lblInfo = new JLabel(
 			"Filme: " + filme + 
@@ -61,28 +69,28 @@ public class assento extends JFrame {
 		for (String nomeAssento : assentos) {
 
 			JButton btnAssento = new JButton(nomeAssento);
-			btnAssento.setBackground(Color.GRAY);
+			btnAssento.setBackground(Color.GRAY); // livre
 			btnAssento.setForeground(Color.BLACK);
 			btnAssento.setFocusPainted(false);
 
-			// Assentos ocupados
-			if (nomeAssento.equals("B2") || nomeAssento.equals("C3")) {
-				btnAssento.setBackground(Color.CYAN);
+			// 🔴 BLOQUEADO (MESMA COR DO ADMIN)
+			if (ControlerAssento.assentosBloqueados.contains(nomeAssento)) {
+				btnAssento.setBackground(Color.RED);
 				btnAssento.setEnabled(false);
 			}
 
 			btnAssento.addActionListener(e -> {
 
-				// 🔥 remove seleção anterior
+				// remove seleção anterior
 				if (assentoSelecionadoBtn != null) {
 					assentoSelecionadoBtn.setBackground(Color.GRAY);
 				}
 
-				// 🔥 nova seleção
+				// nova seleção
 				assentoSelecionadoBtn = btnAssento;
 				assentoSelecionado = nomeAssento;
 
-				btnAssento.setBackground(Color.ORANGE);
+				btnAssento.setBackground(Color.ORANGE); // selecionado
 			});
 
 			painelAssentos.add(btnAssento);
@@ -98,18 +106,16 @@ public class assento extends JFrame {
 		});
 		contentPane.add(btnVoltar);
 
-		// ✅ CONFIRMAR COM VALIDAÇÃO
+		// ✅ CONFIRMAR
 		JButton btnConfirmar = new JButton("Confirmar");
 		btnConfirmar.setBounds(670, 557, 179, 53);
 		btnConfirmar.addActionListener(e -> {
 
-			// 🔥 OBRIGATÓRIO TER 1 ASSENTO
 			if (assentoSelecionado == null) {
 				JOptionPane.showMessageDialog(null, "Selecione um assento!");
 				return;
 			}
 
-			// segue fluxo
 			pagamento telaPagamento = new pagamento(filme, horario, assentoSelecionado, tipo);
 			telaPagamento.setVisible(true);
 			dispose();
@@ -131,5 +137,8 @@ public class assento extends JFrame {
 		lbl3.setIcon(new ImageIcon("images/galaxy_2560x1250.png"));
 		lbl3.setBounds(-20, 0, 2560, 1250);
 		contentPane.add(lbl3);
+
+		// 🔥 CORREÇÃO DO FUNDO (MUITO IMPORTANTE)
+		contentPane.setComponentZOrder(lbl3, contentPane.getComponentCount() - 1);
 	}
 }

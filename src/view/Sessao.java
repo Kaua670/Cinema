@@ -32,6 +32,7 @@ public class Sessao extends JFrame {
 	}
 
 	public Sessao(String filme) {
+		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		this.filme = filme;
 
 		setTitle("Sessões");

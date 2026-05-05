@@ -36,6 +36,7 @@ public class telalogin extends JFrame {
 	}
 
 	public telalogin() {
+		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setTitle("Login - Cine Lumi");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1920, 1080);

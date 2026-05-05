@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.print.PrinterException;
 
+import Controle.ControlePreco;
+
 public class pagamento extends JFrame {
 
 	private static final long serialVersionUID = 1L;
@@ -28,6 +30,7 @@ public class pagamento extends JFrame {
 	private boolean pagamentoPixConfirmado = false;
 
 	public pagamento(String filme, String horario, String assento, String tipo) {
+		setExtendedState(JFrame.MAXIMIZED_BOTH);
 
 		this.filme = filme;
 		this.horario = horario;
@@ -74,13 +77,13 @@ public class pagamento extends JFrame {
 		lblValor.setBounds(655, 545, 80, 25);
 		contentPane.add(lblValor);
 
-		// ===== VALOR =====
-		String valorInicial = tipo.equals("3D") ? "30.00" : "20.00";
-
-		txtValor = new JTextField(valorInicial);
+		// ===== CAMPO VALOR =====
+		txtValor = new JTextField();
 		txtValor.setBounds(718, 545, 140, 25);
 		txtValor.setEditable(false);
 		contentPane.add(txtValor);
+
+		atualizarValor();
 
 		// ===== PAGAMENTO =====
 		comboPagamento = new JComboBox<>();
@@ -127,13 +130,11 @@ public class pagamento extends JFrame {
 		btnConfirmarPix = new JButton("Confirmar PIX");
 		btnConfirmarPix.setBounds(655, 854, 133, 43);
 		btnConfirmarPix.setVisible(false);
-
 		btnConfirmarPix.addActionListener(e -> {
 			pagamentoPixConfirmado = true;
 			btnFinalizar.setEnabled(true);
 			JOptionPane.showMessageDialog(this, "PIX confirmado!");
 		});
-
 		contentPane.add(btnConfirmarPix);
 
 		JButton btnVoltar = new JButton("Voltar");
@@ -149,65 +150,34 @@ public class pagamento extends JFrame {
 		btnImprimir.addActionListener(e -> imprimirRelatorio("Teste"));
 		contentPane.add(btnImprimir);
 
-		// ===== LÓGICA =====
-		comboPagamento.addActionListener(e -> {
+		// ===== IMAGEM "PAGAMENTO" (RESTAURADA) =====
+		JLabel titulo = new JLabel();
+		titulo.setIcon(new ImageIcon("images/image-removebg-preview (5).png"));
+		titulo.setBounds(657, 221, 1279, 205);
+		contentPane.add(titulo);
 
-			String forma = comboPagamento.getSelectedItem().toString();
-
-			if (forma.equals("Cartão")) {
-				comboTipoCartao.setEnabled(true);
-			} else {
-				comboTipoCartao.setEnabled(false);
-				comboParcelas.setEnabled(false);
-			}
-
-			if (forma.equals("PIX")) {
-
-				pagamentoPixConfirmado = false;
-				btnFinalizar.setEnabled(false);
-				btnConfirmarPix.setVisible(true);
-
-				if (tipo.equals("2D")) {
-					PIX20.setVisible(true);
-					PIX30.setVisible(false);
-				} else {
-					PIX30.setVisible(true);
-					PIX20.setVisible(false);
-				}
-
-			} else {
-				btnFinalizar.setEnabled(true);
-				btnConfirmarPix.setVisible(false);
-				PIX20.setVisible(false);
-				PIX30.setVisible(false);
-			}
-		});
-
-		comboTipoCartao.addActionListener(e -> {
-			if (comboTipoCartao.getSelectedItem().equals("Crédito")) {
-				comboParcelas.setEnabled(true);
-			} else {
-				comboParcelas.setEnabled(false);
-			}
-		});
-
-		// ===== IMAGENS =====
-		JLabel img1 = new JLabel("");
-		img1.setIcon(new ImageIcon("images/image-removebg-preview (5).png"));
-		img1.setBounds(657, 221, 1279, 205);
-		contentPane.add(img1);
-
-		JLabel img2 = new JLabel("");
-		img2.setIcon(new ImageIcon("images/Robô_futurista_em_um_cenário_cósmico-removebg-preview.png"));
-		img2.setBounds(1001, 606, 535, 534);
-		contentPane.add(img2);
-
+		// ===== FUNDO =====
 		JLabel bg = new JLabel("");
 		bg.setIcon(new ImageIcon("images/galaxy_2560x1250.png"));
 		bg.setBounds(-23, 0, 2560, 1250);
 		contentPane.add(bg);
-		
-		
+
+		// 🔥 GARANTE FUNDO ATRÁS
+		contentPane.setComponentZOrder(bg, contentPane.getComponentCount() - 1);
+	}
+
+	// ===== VALOR DINÂMICO =====
+	private void atualizarValor() {
+
+		double valor;
+
+		if (tipo.equals("3D")) {
+			valor = ControlePreco.preco3D;
+		} else {
+			valor = ControlePreco.preco2D;
+		}
+
+		txtValor.setText(String.format("%.2f", valor));
 	}
 
 	// ===== FINALIZAR =====
@@ -219,6 +189,7 @@ public class pagamento extends JFrame {
 		}
 
 		String relatorio =
+			"CINE LUMI\n" +
 			"===== RELATÓRIO =====\n\n" +
 			"Filme: " + filme + "\n" +
 			"Sessão: " + horario + "\n" +
@@ -232,13 +203,10 @@ public class pagamento extends JFrame {
 		if (op == JOptionPane.YES_OPTION) {
 			imprimirRelatorio(relatorio);
 		}
-		
-	  new Ingresso().setVisible(true);
-	  dispose();
-		  
-		  
-	  }
-	
+
+		new Ingresso().setVisible(true);
+		dispose();
+	}
 
 	// ===== IMPRIMIR =====
 	private void imprimirRelatorio(String texto) {
@@ -248,6 +216,5 @@ public class pagamento extends JFrame {
 		} catch (PrinterException e) {
 			e.printStackTrace();
 		}
-
-	 }
 	}
+}

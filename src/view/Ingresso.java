@@ -35,6 +35,7 @@ public class Ingresso extends JFrame {
 	}
 
 	public Ingresso() {
+		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setTitle("Filmes");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1920,1080);
