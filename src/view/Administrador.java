@@ -34,8 +34,8 @@ public class Administrador extends JFrame {
 		});
 	}
 
-	public Administrador() {m
-
+	public Administrador() {
+		
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("Painel Admin");
