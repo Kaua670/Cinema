@@ -11,10 +11,11 @@ public class telacadastro extends JFrame {
     private JPasswordField passwordConfirmField;
 
     private JButton btnCadastrar;
-    private JButton btnVoltar; // 🔥 AGORA É GLOBAL
+    private JButton btnVoltar;
     private boolean modoRecuperacao = false;
 
     public telacadastro() {
+
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 1920, 1080);
@@ -25,22 +26,22 @@ public class telacadastro extends JFrame {
 
         contentPane = fundo;
 
-        // 👤 USUÁRIO
+        // ================= USUÁRIO =================
         textField = new JTextField();
         textField.setBounds(772, 350, 326, 40);
         contentPane.add(textField);
 
-        // 🔒 SENHA
+        // ================= SENHA =================
         passwordField = new JPasswordField();
         passwordField.setBounds(772, 430, 326, 40);
         contentPane.add(passwordField);
 
-        // 🔘 BOTÃO CADASTRAR
+        // ================= BOTÃO CADASTRAR =================
         btnCadastrar = new JButton("Cadastrar");
         btnCadastrar.setBounds(772, 500, 155, 49);
         contentPane.add(btnCadastrar);
 
-        // 🔘 BOTÃO VOLTAR (AGORA GLOBAL)
+        // ================= BOTÃO VOLTAR =================
         btnVoltar = new JButton("Voltar");
         btnVoltar.setBounds(937, 500, 161, 49);
         contentPane.add(btnVoltar);
@@ -50,7 +51,7 @@ public class telacadastro extends JFrame {
             dispose();
         });
 
-        // 🔥 AÇÃO PRINCIPAL
+        // ================= AÇÃO PRINCIPAL =================
         btnCadastrar.addActionListener(e -> {
 
             String usuario = textField.getText().trim();
@@ -62,7 +63,7 @@ public class telacadastro extends JFrame {
 
             char[] senhaChars = passwordField.getPassword();
 
-            // 🔥 RECUPERAÇÃO DE SENHA
+            // ================= RECUPERAÇÃO DE SENHA =================
             if (modoRecuperacao) {
 
                 char[] confirmarChars = passwordConfirmField.getPassword();
@@ -91,10 +92,11 @@ public class telacadastro extends JFrame {
 
                 new telalogin().setVisible(true);
                 dispose();
+
                 return;
             }
 
-            // 🟢 CADASTRO NORMAL
+            // ================= CADASTRO NORMAL =================
             if (senhaChars.length == 0) {
                 JOptionPane.showMessageDialog(null, "Digite a senha!");
                 return;
@@ -107,7 +109,7 @@ public class telacadastro extends JFrame {
                 return;
             }
 
-            // 🔍 VERIFICA SE JÁ EXISTE
+            // ================= VERIFICA USUÁRIO =================
             if (dao.UsuarioDAO.usuarioExiste(usuario)) {
 
                 int opcao = JOptionPane.showConfirmDialog(
@@ -125,7 +127,7 @@ public class telacadastro extends JFrame {
                 return;
             }
 
-            // 💾 CADASTRAR
+            // ================= CADASTRAR =================
             dao.UsuarioDAO.cadastrar(usuario, senha);
 
             JOptionPane.showMessageDialog(null, "Cadastro realizado com sucesso!");
@@ -134,23 +136,26 @@ public class telacadastro extends JFrame {
             dispose();
         });
 
-        // 🎨 VISUAL
+        // ================= IMAGEM ROBÔ =================
         JLabel robo = new JLabel();
         robo.setIcon(new ImageIcon("images/Robô_futurista_em_um_cenário_cósmico-removebg-preview.png"));
         robo.setBounds(1162, 130, 1598, 1342);
         contentPane.add(robo);
 
+        // ================= TÍTULO =================
         JLabel titulo = new JLabel();
         titulo.setIcon(new ImageIcon("images/image-removebg-preview (2).png"));
         titulo.setBounds(650, 191, 590, 155);
         contentPane.add(titulo);
 
+        // ================= LABEL USUÁRIO =================
         JLabel lblUsuario = new JLabel("Usuario");
         lblUsuario.setForeground(Color.WHITE);
         lblUsuario.setFont(new Font("Tahoma", Font.PLAIN, 22));
         lblUsuario.setBounds(772, 310, 128, 42);
         contentPane.add(lblUsuario);
 
+        // ================= LABEL SENHA =================
         JLabel lblSenha = new JLabel("Senha");
         lblSenha.setForeground(Color.WHITE);
         lblSenha.setFont(new Font("Tahoma", Font.PLAIN, 22));
@@ -158,8 +163,9 @@ public class telacadastro extends JFrame {
         contentPane.add(lblSenha);
     }
 
-    // 🔥 RECUPERAÇÃO DE SENHA
+    // ================= RECUPERAÇÃO DE SENHA =================
     public telacadastro(String usuario) {
+
         this();
 
         modoRecuperacao = true;
@@ -168,8 +174,10 @@ public class telacadastro extends JFrame {
         textField.setEditable(false);
 
         passwordField.setText("");
+
         btnCadastrar.setText("Alterar senha");
 
+        // ================= CONFIRMAR SENHA =================
         passwordConfirmField = new JPasswordField();
         passwordConfirmField.setBounds(772, 510, 326, 40);
         contentPane.add(passwordConfirmField);
@@ -177,10 +185,10 @@ public class telacadastro extends JFrame {
         JLabel lblConfirmar = new JLabel("Confirmar Senha");
         lblConfirmar.setForeground(Color.WHITE);
         lblConfirmar.setFont(new Font("Tahoma", Font.PLAIN, 22));
-        lblConfirmar.setBounds(772, 470, 200, 40);
+        lblConfirmar.setBounds(772, 470, 250, 40);
         contentPane.add(lblConfirmar);
 
-        // 🔥 REPOSICIONA BOTÕES LADO A LADO
+        // ================= REPOSICIONA BOTÕES =================
         btnCadastrar.setBounds(772, 570, 155, 49);
         btnVoltar.setBounds(937, 570, 161, 49);
     }

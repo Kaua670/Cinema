@@ -8,6 +8,7 @@ import javax.swing.*;
 
 import dao.UsuarioDAO;
 import dao.Banco;
+import Controle.SessaoUsuario;
 
 public class telalogin extends JFrame {
 
@@ -110,7 +111,8 @@ public class telalogin extends JFrame {
 			// ✅ ADMIN FIXO PRIMEIRO (CORREÇÃO)
 			if (usuario.equals("adm01") && senha.equals("141516")) {
 				JOptionPane.showMessageDialog(null, "Login como ADMIN!");
-				new Administrador().setVisible(true);
+				SessaoUsuario.usuarioLogado = usuario;
+                new Administrador().setVisible(true);
 				dispose();
 				return;
 			}
@@ -131,6 +133,7 @@ public class telalogin extends JFrame {
 			// 👤 USUÁRIO NORMAL
 			else if (UsuarioDAO.verificar(usuario, senha)) {
 				JOptionPane.showMessageDialog(null, "Login realizado com sucesso!");
+				SessaoUsuario.usuarioLogado = usuario;
 				new Ingresso().setVisible(true);
 				dispose();
 			}
