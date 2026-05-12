@@ -439,15 +439,15 @@ public class pagamento extends JFrame {
 				assento
 		);
 
-		// ===== SALVA INGRESSO =====
 		IngressoDAO.salvarIngresso(
-				SessaoUsuario.usuarioLogado,
-				filme,
-				horario,
-				tipo,
-				assento
+		        SessaoUsuario.usuarioLogado,
+		        filme,
+		        horario,
+		        tipo,
+		        assento,
+		        comboPagamento.getSelectedItem().toString(),
+		        txtValor.getText()
 		);
-
 		// ===== RELATÓRIO =====
 		String relatorio =
 

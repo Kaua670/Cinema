@@ -13,7 +13,7 @@ public class Banco {
         return DriverManager.getConnection(URL);
     }
 
-    // ================= INICIALIZA BANCO =================
+ // ================= INICIALIZA BANCO =================
     public static void init() {
 
         try (
@@ -21,67 +21,72 @@ public class Banco {
                 Statement stmt = conn.createStatement()
         ) {
 
-            System.out.println("✅ Banco conectado!");
 
-            // ================= TABELA FILMES =================
-            String filmes =
-                    "CREATE TABLE IF NOT EXISTS filmes ("
-                            + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-                            + "nome TEXT,"
-                            + "classificacao TEXT,"
-                            + "imagem TEXT"
-                            + ");";
+System.out.println("✅ Banco conectado!");
 
-            stmt.execute(filmes);
+// ================= TABELA FILMES =================
+String filmes =
+        "CREATE TABLE IF NOT EXISTS filmes ("
+                + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + "nome TEXT,"
+                + "classificacao TEXT,"
+                + "imagem TEXT"
+                + ");";
 
-            // ================= TABELA USUÁRIOS =================
-            String usuarios =
-                    "CREATE TABLE IF NOT EXISTS usuarios ("
-                            + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-                            + "usuario TEXT UNIQUE,"
-                            + "senha TEXT"
-                            + ");";
+stmt.execute(filmes);
 
-            stmt.execute(usuarios);
+// ================= TABELA USUÁRIOS =================
+String usuarios =
+        "CREATE TABLE IF NOT EXISTS usuarios ("
+                + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + "usuario TEXT UNIQUE,"
+                + "senha TEXT"
+                + ");";
 
-            // ================= TABELA ADMIN =================
-            String admin =
-                    "CREATE TABLE IF NOT EXISTS Administrador ("
-                            + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-                            + "usuarioAdm TEXT,"
-                            + "senhaAdm TEXT"
-                            + ");";
+stmt.execute(usuarios);
 
-            stmt.execute(admin);
+// ================= TABELA ADMIN =================
+String admin =
+        "CREATE TABLE IF NOT EXISTS Administrador ("
+                + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + "usuarioAdm TEXT UNIQUE,"
+                + "senhaAdm TEXT"
+                + ");";
 
-            // ================= ADMIN PADRÃO =================
-            String insertAdmin =
-                    "INSERT OR IGNORE INTO Administrador(usuarioAdm, senhaAdm) "
-                            + "VALUES('adm01', '141516')";
+stmt.execute(admin);
 
-            stmt.execute(insertAdmin);
+// ================= ADMIN PADRÃO =================
+String insertAdmin =
+        "INSERT OR IGNORE INTO Administrador(usuarioAdm, senhaAdm) "
+                + "VALUES('adm01', '141516')";
 
-            // ================= TABELA ASSENTOS =================
-            String assentos =
-                    "CREATE TABLE IF NOT EXISTS assentos ("
-                            + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-                            + "filme TEXT,"
-                            + "horario TEXT,"
-                            + "tipo TEXT,"
-                            + "assento TEXT"
-                            + ");";
+stmt.execute(insertAdmin);
 
-            stmt.execute(assentos);
+// ================= TABELA INGRESSO =================
+String ingresso =
+        "CREATE TABLE IF NOT EXISTS ingresso ("
+                + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + "usuario TEXT,"
+                + "filme TEXT,"
+                + "horario TEXT,"
+                + "tipo TEXT,"
+                + "assento TEXT,"
+                + "pagamento TEXT,"
+                + "valor TEXT"
+                + ");";
 
-            System.out.println("✅ Tabelas criadas!");
+stmt.execute(ingresso);
 
-        } catch (Exception e) {
+System.out.println("✅ Tabelas criadas!");
 
-            System.out.println("❌ Erro ao iniciar banco!");
+} catch (Exception e) {
 
-            e.printStackTrace();
-        }
+System.out.println("❌ Erro ao iniciar banco!");
+
+e.printStackTrace();
+}
     }
+
 
     // ================= CONECTAR =================
     public static Connection conectar() {

@@ -120,7 +120,8 @@ public class assento extends JFrame {
 			boolean bloqueadoAdmin =
 					ControlerAssento.assentosBloqueados
 							.contains(nomeAssento);
-
+			
+		
 			// ================= ASSENTO OCUPADO CLIENTE =================
 			boolean ocupadoCliente =
 					IngressoDAO.assentoOcupado(
@@ -137,14 +138,23 @@ public class assento extends JFrame {
 					" | Cliente: " + ocupadoCliente
 			);
 
-			// ================= BLOQUEIA ASSENTO =================
-			if (bloqueadoAdmin || ocupadoCliente) {
+			// ================= BLOQUEIO CORRETO =================
+			if (ocupadoCliente) {
+
+				btnAssento.setBackground(new Color(120,0,0));
+
+				btnAssento.setForeground(Color.WHITE);
+
+				btnAssento.setEnabled(false);
+
+			} 
+			else if (bloqueadoAdmin) {
 
 				btnAssento.setBackground(Color.RED);
 
 				btnAssento.setForeground(Color.WHITE);
 
-				btnAssento.setEnabled(false);
+				btnAssento.setEnabled(true); // permite clicar para desbloquear
 			}
 
 			// ================= SELECIONAR ASSENTO =================

@@ -7,72 +7,108 @@ import java.util.ArrayList;
 
 public class IngressoDAO {
 
-    // ================= SALVAR INGRESSO =================
-    public static void salvarIngresso(
-            String usuario,
-            String filme,
-            String horario,
-            String tipo,
-            String assento
-    ) {
+	// ================= SALVAR INGRESSO =================
+	public static void salvarIngresso(
+	        String usuario,
+	        String filme,
+	        String horario,
+	        String tipo,
+	        String assento,
+	        String pagamento,
+	        String valor
+	) {
 
-        String sql =
-                "INSERT INTO ingressos "
-                + "(usuario, filme, horario, tipo, assento) "
-                + "VALUES (?, ?, ?, ?, ?)";
+	    String sql =
+	            "INSERT INTO ingresso "
+	            + "(usuario, filme, horario, tipo, assento, pagamento, valor) "
+	            + "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-        try (Connection conn = Banco.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+	    try (Connection conn = Banco.getConnection();
+	         PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setString(1, usuario);
-            stmt.setString(2, filme);
-            stmt.setString(3, horario);
-            stmt.setString(4, tipo);
-            stmt.setString(5, assento);
+	        stmt.setString(1, usuario);
+	        stmt.setString(2, filme);
+	        stmt.setString(3, horario);
+	        stmt.setString(4, tipo);
+	        stmt.setString(5, assento);
+	        stmt.setString(6, pagamento);
+	        stmt.setString(7, valor);
 
-            stmt.executeUpdate();
+	        stmt.executeUpdate();
 
-        } catch (Exception e) {
+	    } catch (Exception e) {
 
-            e.printStackTrace();
-        }
-    }
+	        e.printStackTrace();
+	    }
+	}
+	// ================= ASSENTO OCUPADO =================
+	public static boolean assentoOcupado(
+	        String filme,
+	        String horario,
+	        String tipo,
+	        String assento
+	) {
 
-    // ================= ASSENTO OCUPADO =================
-    public static boolean assentoOcupado(
-            String filme,
-            String horario,
-            String tipo,
-            String assento
-    ) {
+	    String sql =
+	            "SELECT * FROM ingresso "
+	          + "WHERE filme = ? "
+	          + "AND horario = ? "
+	          + "AND tipo = ? "
+	          + "AND assento = ?";
 
-        String sql =
-                "SELECT 1 FROM ingressos "
-                + "WHERE filme = ? "
-                + "AND horario = ? "
-                + "AND tipo = ? "
-                + "AND assento = ?";
+	    try (
+	            Connection conn = Banco.getConnection();
+	            PreparedStatement stmt = conn.prepareStatement(sql)
+	    ) {
 
-        try (Connection conn = Banco.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+	        stmt.setString(1, filme);
+	        stmt.setString(2, horario);
+	        stmt.setString(3, tipo);
+	        stmt.setString(4, assento);
 
-            stmt.setString(1, filme);
-            stmt.setString(2, horario);
-            stmt.setString(3, tipo);
-            stmt.setString(4, assento);
+	        ResultSet rs = stmt.executeQuery();
 
-            ResultSet rs = stmt.executeQuery();
+	        return rs.next();
 
-            return rs.next();
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
 
-        } catch (Exception e) {
+	    return false;
+	}
+	
+	// ================= REMOVER INGRESSO =================
+	public static void removerIngresso(
+	        String filme,
+	        String horario,
+	        String tipo,
+	        String assento
+	) {
 
-            e.printStackTrace();
-        }
+	    String sql =
+	            "DELETE FROM ingresso "
+	          + "WHERE filme=? "
+	          + "AND horario=? "
+	          + "AND tipo=? "
+	          + "AND assento=?";
 
-        return false;
-    }
+	    try (
+	            Connection conn = Banco.getConnection();
+	            PreparedStatement stmt = conn.prepareStatement(sql)
+	    ) {
 
+	        stmt.setString(1, filme);
+	        stmt.setString(2, horario);
+	        stmt.setString(3, tipo);
+	        stmt.setString(4, assento);
+
+	        stmt.executeUpdate();
+
+	    } catch (Exception e) {
+
+	        e.printStackTrace();
+	    }
+	}
     // ================= RELATÓRIO =================
     public static ArrayList<String> listarRelatorio() {
 
@@ -80,7 +116,7 @@ public class IngressoDAO {
                 new ArrayList<>();
 
         String sql =
-                "SELECT * FROM ingressos";
+                "SELECT * FROM Ingresso";
 
         try (Connection conn = Banco.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
@@ -88,12 +124,32 @@ public class IngressoDAO {
 
             while (rs.next()) {
 
-                String dados =
-                        "Cliente: " + rs.getString("usuario")
-                        + "\nFilme: " + rs.getString("filme")
-                        + "\nSessão: " + rs.getString("horario")
-                        + "\nTipo: " + rs.getString("tipo")
-                        + "\nAssento: " + rs.getString("assento");
+            	String dados =
+
+            	        
+
+                        
+              	" Cliente: " + rs.getString("usuario")
+
+            	        + 
+            	" , Filme: " + rs.getString("filme")
+
+            	        + 
+            	" , Sessão: " + rs.getString("horario")
+
+            	        + 
+            	" , Tipo: " + rs.getString("tipo")
+
+            	        + 
+            	" , Assento: " + rs.getString("assento")
+
+            	        + 
+            	" , Pagamento: " + rs.getString("pagamento")
+
+            	        + 
+            	" , Valor: R$ " + rs.getString("valor");
+ 
+            
 
                 lista.add(dados);
             }
@@ -105,4 +161,5 @@ public class IngressoDAO {
 
         return lista;
     }
+	
 }

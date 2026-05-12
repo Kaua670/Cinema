@@ -1,34 +1,59 @@
 package view;
 
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.EventQueue;
-import javax.swing.*;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 
 import Controle.ControlePreco;
 import Controle.ControlerAssento;
-
-import java.awt.Font;
-import java.awt.GridLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.List;
-
+import dao.FilmeDAO;
 import dao.IngressoDAO;
+import dao.AssentoDAO;
 
 public class Administrador extends JFrame {
+
+	private static final long serialVersionUID = 1L;
 
 	private JPanel contentPane;
 
 	private JTextField campo2D;
 	private JTextField campo3D;
 
-	// ================= CAMPOS FILME =================
 	private JTextField campoFilme;
 	private JTextField campoClass;
 	private JTextField campoExcluirFilme;
 
+	// NOVO CAMPO DATA
+	private JTextField campoData;
+
 	private String caminhoImagem = "";
+
+	private JPanel painelAssentos;
+
+	private JComboBox<String> comboFilme;
+	private JComboBox<String> comboHorario;
+	private JComboBox<String> comboTipo;
+
+	private Set<String> assentosTemp =
+			new HashSet<>();
 
 	public static void main(String[] args) {
 
@@ -47,11 +72,11 @@ public class Administrador extends JFrame {
 
 	public Administrador() {
 
+		setTitle("Painel Administrador");
+
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-		setTitle("Painel Admin");
 
 		contentPane = new JPanel();
 
@@ -60,8 +85,13 @@ public class Administrador extends JFrame {
 		setContentPane(contentPane);
 
 		// ================= TÍTULO =================
+
 		JLabel titulo =
 				new JLabel("PAINEL ADMINISTRADOR");
+
+		titulo.setBounds(650, 20, 600, 50);
+
+		titulo.setForeground(Color.WHITE);
 
 		titulo.setFont(
 				new Font(
@@ -71,13 +101,10 @@ public class Administrador extends JFrame {
 				)
 		);
 
-		titulo.setForeground(Color.WHITE);
-
-		titulo.setBounds(650, 30, 500, 50);
-
 		contentPane.add(titulo);
 
 		// ================= CADASTRAR FILME =================
+
 		JLabel tituloFilme =
 				new JLabel("CADASTRAR FILME");
 
@@ -158,6 +185,8 @@ public class Administrador extends JFrame {
 
 		btnCadastrarFilme.setBounds(100, 350, 250, 50);
 
+		contentPane.add(btnCadastrarFilme);
+
 		btnCadastrarFilme.addActionListener(e -> {
 
 			String nome =
@@ -166,9 +195,11 @@ public class Administrador extends JFrame {
 			String classificacao =
 					campoClass.getText().trim();
 
-			if (nome.isEmpty()
+			if (
+					nome.isEmpty()
 					|| classificacao.isEmpty()
-					|| caminhoImagem.isEmpty()) {
+					|| caminhoImagem.isEmpty()
+			) {
 
 				JOptionPane.showMessageDialog(
 						null,
@@ -178,7 +209,7 @@ public class Administrador extends JFrame {
 				return;
 			}
 
-			dao.FilmeDAO.adicionarFilme(
+			FilmeDAO.adicionarFilme(
 					nome,
 					classificacao,
 					caminhoImagem
@@ -194,35 +225,36 @@ public class Administrador extends JFrame {
 			campoClass.setText("");
 
 			caminhoImagem = "";
+
+			atualizarFilmes();
 		});
 
-		contentPane.add(btnCadastrarFilme);
-
 		// ================= EXCLUIR FILME =================
-		JLabel lblExcluirFilme =
-				new JLabel("Excluir filme:");
 
-		lblExcluirFilme.setBounds(100, 420, 200, 30);
+		JLabel lblExcluir =
+				new JLabel("Excluir Filme:");
 
-		lblExcluirFilme.setForeground(Color.WHITE);
+		lblExcluir.setBounds(100, 430, 200, 30);
 
-		contentPane.add(lblExcluirFilme);
+		lblExcluir.setForeground(Color.WHITE);
+
+		contentPane.add(lblExcluir);
 
 		campoExcluirFilme =
 				new JTextField();
 
-		campoExcluirFilme.setBounds(100, 450, 250, 40);
+		campoExcluirFilme.setBounds(100, 460, 250, 40);
 
 		contentPane.add(campoExcluirFilme);
 
-		JButton btnExcluirFilme =
+		JButton btnExcluir =
 				new JButton("Excluir Filme");
 
-		btnExcluirFilme.setBounds(100, 500, 250, 50);
+		btnExcluir.setBounds(100, 520, 250, 50);
 
-		contentPane.add(btnExcluirFilme);
+		contentPane.add(btnExcluir);
 
-		btnExcluirFilme.addActionListener(e -> {
+		btnExcluir.addActionListener(e -> {
 
 			String nome =
 					campoExcluirFilme.getText().trim();
@@ -231,20 +263,22 @@ public class Administrador extends JFrame {
 
 				JOptionPane.showMessageDialog(
 						null,
-						"Digite o nome do filme!"
+						"Digite um filme!"
 				);
 
 				return;
 			}
 
-			if (dao.FilmeDAO.excluirFilme(nome)) {
+			if (FilmeDAO.excluirFilme(nome)) {
 
 				JOptionPane.showMessageDialog(
 						null,
-						"Filme excluído com sucesso!"
+						"Filme excluído!"
 				);
 
 				campoExcluirFilme.setText("");
+
+				atualizarFilmes();
 
 			} else {
 
@@ -256,14 +290,15 @@ public class Administrador extends JFrame {
 		});
 
 		// ================= PREÇOS =================
-		JLabel lbl1 =
+
+		JLabel lbl2D =
 				new JLabel("PREÇO 2D:");
 
-		lbl1.setBounds(650, 120, 200, 30);
+		lbl2D.setBounds(500, 90, 150, 30);
 
-		lbl1.setForeground(Color.WHITE);
+		lbl2D.setForeground(Color.WHITE);
 
-		contentPane.add(lbl1);
+		contentPane.add(lbl2D);
 
 		campo2D =
 				new JTextField(
@@ -272,18 +307,18 @@ public class Administrador extends JFrame {
 						)
 				);
 
-		campo2D.setBounds(650, 150, 200, 40);
+		campo2D.setBounds(500, 120, 150, 40);
 
 		contentPane.add(campo2D);
 
-		JLabel lbl2 =
+		JLabel lbl3D =
 				new JLabel("PREÇO 3D:");
 
-		lbl2.setBounds(900, 120, 200, 30);
+		lbl3D.setBounds(700, 90, 150, 30);
 
-		lbl2.setForeground(Color.WHITE);
+		lbl3D.setForeground(Color.WHITE);
 
-		contentPane.add(lbl2);
+		contentPane.add(lbl3D);
 
 		campo3D =
 				new JTextField(
@@ -292,74 +327,135 @@ public class Administrador extends JFrame {
 						)
 				);
 
-		campo3D.setBounds(900, 150, 200, 40);
+		campo3D.setBounds(700, 120, 150, 40);
 
 		contentPane.add(campo3D);
 
-		// ================= ASSENTOS =================
-		Set<String> assentosTemp =
-				new HashSet<>(
-						ControlerAssento.assentosBloqueados
-				);
+		// ================= FILME =================
 
-		JPanel painel =
-				new JPanel(
-						new GridLayout(4, 5, 10, 10)
-				);
+		JLabel lblFilmeSessao =
+				new JLabel("Filme:");
 
-		painel.setBounds(500, 250, 900, 250);
+		lblFilmeSessao.setBounds(500, 200, 100, 30);
 
-		painel.setOpaque(false);
+		lblFilmeSessao.setForeground(Color.WHITE);
 
-		contentPane.add(painel);
+		contentPane.add(lblFilmeSessao);
 
-		String[] assentos = {
+		comboFilme =
+				new JComboBox<>();
 
-				"A1", "A2", "A3", "A4", "A5",
+		comboFilme.setBounds(560, 200, 220, 35);
 
-				"B1", "B2", "B3", "B4", "B5",
+		contentPane.add(comboFilme);
 
-				"C1", "C2", "C3", "C4", "C5",
+		atualizarFilmes();
 
-				"D1", "D2", "D3", "D4", "D5"
+		// ================= DATA =================
+
+		JLabel lblData =
+				new JLabel("Data:");
+
+		lblData.setBounds(820, 200, 100, 30);
+
+		lblData.setForeground(Color.WHITE);
+
+		contentPane.add(lblData);
+
+		campoData =
+				new JTextField();
+
+		campoData.setBounds(870, 200, 120, 35);
+
+		campoData.setToolTipText(
+				"Ex: 25/12/2026"
+		);
+
+		contentPane.add(campoData);
+
+		// ================= HORÁRIO =================
+
+		JLabel lblHorario =
+				new JLabel("Sessão:");
+
+		lblHorario.setBounds(1020, 200, 100, 30);
+
+		lblHorario.setForeground(Color.WHITE);
+
+		contentPane.add(lblHorario);
+
+		String[] horarios = {
+				"14:00",
+				"18:00"
 		};
 
-		for (String a : assentos) {
+		comboHorario =
+				new JComboBox<>(horarios);
 
-			JButton btn = new JButton(a);
+		comboHorario.setBounds(1090, 200, 120, 35);
 
-			btn.setForeground(Color.WHITE);
+		contentPane.add(comboHorario);
 
-			btn.setBackground(
-					assentosTemp.contains(a)
-							? Color.RED
-							: Color.GRAY
-			);
+		// ================= TIPO =================
 
-			btn.addActionListener(e -> {
+		JLabel lblTipo =
+				new JLabel("Tipo:");
 
-				if (assentosTemp.contains(a)) {
+		lblTipo.setBounds(1240, 200, 100, 30);
 
-					assentosTemp.remove(a);
+		lblTipo.setForeground(Color.WHITE);
 
-					btn.setBackground(Color.GRAY);
+		contentPane.add(lblTipo);
 
-				} else {
+		String[] tipos = {
+				"2D",
+				"3D"
+		};
 
-					assentosTemp.add(a);
+		comboTipo =
+				new JComboBox<>(tipos);
 
-					btn.setBackground(Color.RED);
-				}
-			});
+		comboTipo.setBounds(1290, 200, 100, 35);
 
-			painel.add(btn);
-		}
+		contentPane.add(comboTipo);
+
+		// ================= BOTÃO CARREGAR =================
+
+		JButton btnCarregar =
+				new JButton("Carregar Assentos");
+
+		btnCarregar.setBounds(1420, 200, 180, 35);
+
+		contentPane.add(btnCarregar);
+
+		btnCarregar.addActionListener(e -> {
+
+			carregarAssentos();
+		});
+
+		// ================= PAINEL ASSENTOS =================
+
+		painelAssentos =
+				new JPanel();
+
+		painelAssentos.setLayout(
+				new GridLayout(4, 5, 10, 10)
+		);
+
+		painelAssentos.setBounds(500, 280, 900, 250);
+
+		painelAssentos.setOpaque(false);
+
+		contentPane.add(painelAssentos);
 
 		// ================= SALVAR =================
+
 		JButton btnSalvar =
 				new JButton("Salvar");
 
-		btnSalvar.setBounds(600, 520, 180, 50);
+		btnSalvar.setBounds(550, 570, 180, 50);
+
+		contentPane.add(btnSalvar);
 
 		btnSalvar.addActionListener(e -> {
 
@@ -390,88 +486,64 @@ public class Administrador extends JFrame {
 
 				JOptionPane.showMessageDialog(
 						null,
-						"Erro nos valores!"
+						"Erro!"
 				);
 			}
 		});
 
-		contentPane.add(btnSalvar);
+		// ================= BOTÃO DESBLOQUEAR ASSENTOS =================
 
-		// ================= HISTÓRICO USUÁRIOS =================
-		JButton btnHistorico =
-				new JButton("Usuários Cadastrados");
+		JButton btnDesbloquear =
+				new JButton("Desbloquear Assentos");
 
-		btnHistorico.setBounds(800, 520, 220, 50);
+		btnDesbloquear.setBounds(1180, 570, 220, 50);
 
-		contentPane.add(btnHistorico);
+		contentPane.add(btnDesbloquear);
 
-		btnHistorico.addActionListener(e -> {
+		btnDesbloquear.addActionListener(e -> {
 
-			List<String> usuarios =
-					dao.UsuarioDAO.listarUsuarios();
-
-			if (usuarios.isEmpty()) {
+			if (assentosTemp.isEmpty()) {
 
 				JOptionPane.showMessageDialog(
 						null,
-						"Nenhum usuário cadastrado."
+						"Selecione os assentos para desbloquear!"
 				);
 
 				return;
 			}
 
-			DefaultListModel<String> model =
-					new DefaultListModel<>();
+			// remove da lista de bloqueados
+			ControlerAssento.assentosBloqueados.removeAll(assentosTemp);
 
-			for (String usuario : usuarios) {
-
-				model.addElement(usuario);
-			}
-
-			JList<String> listaUsuarios =
-					new JList<>(model);
-
-			listaUsuarios.setFont(
-					new Font(
-							"Monospaced",
-							Font.PLAIN,
-							16
-					)
-			);
-
-			JScrollPane scroll =
-					new JScrollPane(listaUsuarios);
-
-			scroll.setPreferredSize(
-					new java.awt.Dimension(500, 400)
-			);
+			assentosTemp.clear();
 
 			JOptionPane.showMessageDialog(
 					null,
-					scroll,
-					"Usuários Cadastrados",
-					JOptionPane.INFORMATION_MESSAGE
+					"Assentos desbloqueados com sucesso!"
 			);
+
+			carregarAssentos();
 		});
 
-		// ================= RELATÓRIO CLIENTES =================
-		JButton btnRelatorio =
-				new JButton("Relatório Clientes");
+		// ================= RELATÓRIO =================
 
-		btnRelatorio.setBounds(1050, 520, 220, 50);
+		JButton btnRelatorio =
+				new JButton("Relatório");
+
+		btnRelatorio.setBounds(770, 570, 180, 50);
 
 		contentPane.add(btnRelatorio);
 
 		btnRelatorio.addActionListener(e -> {
 
-			java.util.ArrayList<String> relatorio =
+			List<String> relatorio =
 					IngressoDAO.listarRelatorio();
 
 			if (relatorio.isEmpty()) {
 
 				JOptionPane.showMessageDialog(
 						null,
-						"Nenhuma compra realizada!"
+						"Nenhuma compra encontrada!"
 				);
 
 				return;
@@ -492,34 +564,29 @@ public class Administrador extends JFrame {
 			JList<String> lista =
 					new JList<>(model);
 
-			lista.setFont(
-					new Font(
-							"Monospaced",
-							Font.PLAIN,
-							16
-					)
-			);
-
 			JScrollPane scroll =
 					new JScrollPane(lista);
 
 			scroll.setPreferredSize(
-					new Dimension(600, 400)
+					new Dimension(700, 400)
 			);
 
 			JOptionPane.showMessageDialog(
 					null,
 					scroll,
-					"Relatório de Clientes",
+					"Relatório de Compras",
 					JOptionPane.INFORMATION_MESSAGE
 			);
 		});
 
 		// ================= VOLTAR =================
+
 		JButton btnVoltar =
 				new JButton("Voltar");
 
-		btnVoltar.setBounds(1300, 520, 180, 50);
+		btnVoltar.setBounds(990, 570, 180, 50);
+
+		contentPane.add(btnVoltar);
 
 		btnVoltar.addActionListener(e -> {
 
@@ -528,26 +595,214 @@ public class Administrador extends JFrame {
 			dispose();
 		});
 
-		contentPane.add(btnVoltar);
-
 		// ================= FUNDO =================
-		JLabel lblNewLabel =
+
+		JLabel fundo =
 				new JLabel();
 
-		lblNewLabel.setIcon(
+		fundo.setIcon(
 				new ImageIcon(
 						"images/galaxy_2560x1250.png"
 				)
 		);
 
-		lblNewLabel.setBounds(-18, 0, 2560, 1250);
+		fundo.setBounds(-20, 0, 2560, 1250);
 
-		contentPane.add(lblNewLabel);
+		contentPane.add(fundo);
 
-		// ================= TRAZER FUNDO PARA TRÁS =================
 		contentPane.setComponentZOrder(
-				lblNewLabel,
+				fundo,
 				contentPane.getComponentCount() - 1
 		);
 	}
+
+	// ================= ATUALIZAR FILMES =================
+
+	private void atualizarFilmes() {
+
+		comboFilme.removeAllItems();
+
+		List<String[]> filmes =
+				FilmeDAO.listarFilmes();
+
+		for (String[] filme : filmes) {
+
+			comboFilme.addItem(
+					filme[0]
+			);
+		}
+	}
+
+	// ================= CARREGAR ASSENTOS =================
+
+	private void carregarAssentos() {
+
+		painelAssentos.removeAll();
+
+		// VERIFICA FILME
+		if (comboFilme.getSelectedItem() == null) {
+
+			JOptionPane.showMessageDialog(
+					null,
+					"Nenhum filme cadastrado!"
+			);
+
+			return;
+		}
+
+		// VERIFICA DATA
+		if (campoData.getText().trim().isEmpty()) {
+
+			JOptionPane.showMessageDialog(
+					null,
+					"Digite uma data!"
+			);
+
+			return;
+		}
+
+		String filme =
+				comboFilme.getSelectedItem().toString();
+
+		String horario =
+				comboHorario.getSelectedItem().toString();
+
+		String tipo =
+				comboTipo.getSelectedItem().toString();
+
+		String[] assentos = {
+
+				"A1","A2","A3","A4","A5",
+
+				"B1","B2","B3","B4","B5",
+
+				"C1","C2","C3","C4","C5",
+
+				"D1","D2","D3","D4","D5"
+		};
+
+		for (String a : assentos) {
+
+			JButton btn =
+					new JButton(a);
+
+			btn.setForeground(Color.WHITE);
+
+			// ================= ASSENTO COMPRADO =================
+			boolean ocupado =
+					IngressoDAO.assentoOcupado(
+							filme,
+							horario,
+							tipo,
+							a
+					);
+
+			// ================= ASSENTO BLOQUEADO =================
+			boolean bloqueado =
+					AssentoDAO.assentoOcupado(
+							filme,
+							horario,
+							tipo,
+							a
+					);
+
+			// ================= STATUS BOTÃO =================
+			if (ocupado) {
+
+				btn.setBackground(
+						new Color(120,0,0)
+				);
+
+				btn.setForeground(Color.WHITE);
+
+				btn.setText(a + " ✓");
+
+				btn.setEnabled(true);
+			}
+			// ================= BLOQUEADO PELO ADM =================
+			else if (bloqueado) {
+
+				btn.setBackground(Color.RED);
+
+				btn.setForeground(Color.WHITE);
+
+				btn.setEnabled(true);
+			}
+
+			// ================= LIVRE =================
+			else {
+
+				btn.setBackground(Color.GRAY);
+
+				btn.setForeground(Color.WHITE);
+
+				btn.setEnabled(true);
+			}
+
+			// ================= CLICK ASSENTO =================
+			btn.addActionListener(e -> {
+
+				// NÃO PODE ALTERAR COMPRADO
+			
+
+				// ================= DESBLOQUEAR =================
+				if (
+						AssentoDAO.assentoOcupado(
+								filme,
+								horario,
+								tipo,
+								a
+						)
+				) {
+
+					AssentoDAO.removerAssento(
+							filme,
+							horario,
+							tipo,
+							a
+					);
+					
+					IngressoDAO.removerIngresso(
+					        filme,
+					        horario,
+					        tipo,
+					        a
+					);
+
+					btn.setBackground(Color.GRAY);
+
+					JOptionPane.showMessageDialog(
+							null,
+							"Assento desbloqueado!"
+					);
+				}
+
+				// ================= BLOQUEAR =================
+				else {
+
+					AssentoDAO.salvarAssento(
+							filme,
+							horario,
+							tipo,
+							a
+					);
+
+					btn.setBackground(Color.RED);
+
+					JOptionPane.showMessageDialog(
+							null,
+							"Assento bloqueado!"
+					);
+				}
+			});
+
+			painelAssentos.add(btn);
+		}
+
+		// ================= ATUALIZA TELA =================
+		painelAssentos.repaint();
+
+		painelAssentos.revalidate();
+	}
+	
 }

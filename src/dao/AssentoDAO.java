@@ -44,7 +44,11 @@ public class AssentoDAO {
     ) {
 
         String sql =
-                "SELECT * FROM assentos WHERE filme=? AND horario=? AND tipo=? AND assento=?";
+                "SELECT * FROM assentos "
+              + "WHERE filme=? "
+              + "AND horario=? "
+              + "AND tipo=? "
+              + "AND assento=?";
 
         try (
                 Connection conn = Banco.getConnection();
@@ -66,5 +70,38 @@ public class AssentoDAO {
         }
 
         return false;
+    }
+
+    // ================= REMOVER ASSENTO =================
+    public static void removerAssento(
+            String filme,
+            String horario,
+            String tipo,
+            String assento
+    ) {
+
+        String sql =
+                "DELETE FROM assentos "
+              + "WHERE filme=? "
+              + "AND horario=? "
+              + "AND tipo=? "
+              + "AND assento=?";
+
+        try (
+                Connection conn = Banco.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)
+        ) {
+
+            stmt.setString(1, filme);
+            stmt.setString(2, horario);
+            stmt.setString(3, tipo);
+            stmt.setString(4, assento);
+
+            stmt.executeUpdate();
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
     }
 }
