@@ -36,7 +36,7 @@ public class Ingresso extends JFrame {
 
 		// 🔙 VOLTAR
 		JButton btnVoltar = new JButton("Voltar");
-		btnVoltar.setBounds(800, 700, 150, 50);
+		btnVoltar.setBounds(1700, 50, 150, 50);
 		btnVoltar.addActionListener(e -> {
 			new telalogin().setVisible(true);
 			dispose();
