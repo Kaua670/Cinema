@@ -670,6 +670,10 @@ public class Administrador extends JFrame {
 		String tipo =
 				comboTipo.getSelectedItem().toString();
 
+		// NOVA DATA
+		String data =
+				campoData.getText().trim();
+
 		String[] assentos = {
 
 				"A1","A2","A3","A4","A5",
@@ -694,6 +698,7 @@ public class Administrador extends JFrame {
 							filme,
 							horario,
 							tipo,
+							data,
 							a
 					);
 
@@ -703,6 +708,7 @@ public class Administrador extends JFrame {
 							filme,
 							horario,
 							tipo,
+							data,
 							a
 					);
 
@@ -719,7 +725,8 @@ public class Administrador extends JFrame {
 
 				btn.setEnabled(true);
 			}
-			// ================= BLOQUEADO PELO ADM =================
+
+			// ================= BLOQUEADO =================
 			else if (bloqueado) {
 
 				btn.setBackground(Color.RED);
@@ -742,8 +749,24 @@ public class Administrador extends JFrame {
 			// ================= CLICK ASSENTO =================
 			btn.addActionListener(e -> {
 
-				// NÃO PODE ALTERAR COMPRADO
-			
+				// ================= NÃO ALTERA COMPRADO =================
+				if (
+						IngressoDAO.assentoOcupado(
+								filme,
+								horario,
+								tipo,
+								data,
+								a
+						)
+				) {
+
+					JOptionPane.showMessageDialog(
+							null,
+							"Assento já comprado!"
+					);
+
+					return;
+				}
 
 				// ================= DESBLOQUEAR =================
 				if (
@@ -751,6 +774,7 @@ public class Administrador extends JFrame {
 								filme,
 								horario,
 								tipo,
+								data,
 								a
 						)
 				) {
@@ -759,14 +783,8 @@ public class Administrador extends JFrame {
 							filme,
 							horario,
 							tipo,
+							data,
 							a
-					);
-					
-					IngressoDAO.removerIngresso(
-					        filme,
-					        horario,
-					        tipo,
-					        a
 					);
 
 					btn.setBackground(Color.GRAY);
@@ -784,6 +802,7 @@ public class Administrador extends JFrame {
 							filme,
 							horario,
 							tipo,
+							data,
 							a
 					);
 
@@ -804,5 +823,4 @@ public class Administrador extends JFrame {
 
 		painelAssentos.revalidate();
 	}
-	
 }

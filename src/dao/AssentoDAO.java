@@ -11,11 +11,13 @@ public class AssentoDAO {
             String filme,
             String horario,
             String tipo,
+            String data,
             String assento
     ) {
 
         String sql =
-                "INSERT INTO assentos(filme, horario, tipo, assento) VALUES(?,?,?,?)";
+                "INSERT INTO assentos(filme, horario, tipo, data_sessao, assento) "
+              + "VALUES(?,?,?,?,?)";
 
         try (
                 Connection conn = Banco.getConnection();
@@ -25,7 +27,8 @@ public class AssentoDAO {
             stmt.setString(1, filme);
             stmt.setString(2, horario);
             stmt.setString(3, tipo);
-            stmt.setString(4, assento);
+            stmt.setString(4, data);
+            stmt.setString(5, assento);
 
             stmt.executeUpdate();
 
@@ -40,6 +43,7 @@ public class AssentoDAO {
             String filme,
             String horario,
             String tipo,
+            String data,
             String assento
     ) {
 
@@ -48,6 +52,7 @@ public class AssentoDAO {
               + "WHERE filme=? "
               + "AND horario=? "
               + "AND tipo=? "
+              + "AND data_sessao=? "
               + "AND assento=?";
 
         try (
@@ -58,7 +63,8 @@ public class AssentoDAO {
             stmt.setString(1, filme);
             stmt.setString(2, horario);
             stmt.setString(3, tipo);
-            stmt.setString(4, assento);
+            stmt.setString(4, data);
+            stmt.setString(5, assento);
 
             ResultSet rs = stmt.executeQuery();
 
@@ -77,6 +83,7 @@ public class AssentoDAO {
             String filme,
             String horario,
             String tipo,
+            String data,
             String assento
     ) {
 
@@ -85,6 +92,7 @@ public class AssentoDAO {
               + "WHERE filme=? "
               + "AND horario=? "
               + "AND tipo=? "
+              + "AND data_sessao=? "
               + "AND assento=?";
 
         try (
@@ -95,7 +103,8 @@ public class AssentoDAO {
             stmt.setString(1, filme);
             stmt.setString(2, horario);
             stmt.setString(3, tipo);
-            stmt.setString(4, assento);
+            stmt.setString(4, data);
+            stmt.setString(5, assento);
 
             stmt.executeUpdate();
 

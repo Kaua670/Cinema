@@ -24,18 +24,25 @@ public class assento extends JFrame {
 	private String filme;
 	private String horario;
 	private String tipo;
+	private String data;
 
 	private String assentoSelecionado = null;
 
 	private JButton assentoSelecionadoBtn = null;
 
-	public assento(String filme, String horario, String tipoSelecionado) {
+	public assento(
+			String filme,
+			String horario,
+			String tipoSelecionado,
+			String dataSelecionada
+	) {
 
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 
 		this.filme = filme;
 		this.horario = horario;
 		this.tipo = tipoSelecionado;
+		this.data = dataSelecionada;
 
 		setTitle("Assentos");
 
@@ -56,14 +63,16 @@ public class assento extends JFrame {
 				"Verificando assentos ocupados para:\n" +
 				"Filme: " + filme +
 				"\nSessão: " + horario +
-				"\nTipo: " + tipo
+				"\nTipo: " + tipo +
+				"\nData: " + data
 		);
 
 		// ================= INFORMAÇÕES =================
 		JLabel lblInfo = new JLabel(
 				"Filme: " + filme +
 				"   Sessão: " + horario +
-				"   Tipo: " + tipo
+				"   Tipo: " + tipo +
+				"   Data: " + data
 		);
 
 		lblInfo.setForeground(Color.WHITE);
@@ -76,7 +85,7 @@ public class assento extends JFrame {
 				)
 		);
 
-		lblInfo.setBounds(706, 267, 900, 63);
+		lblInfo.setBounds(706, 267, 1200, 63);
 
 		contentPane.add(lblInfo);
 
@@ -120,14 +129,14 @@ public class assento extends JFrame {
 			boolean bloqueadoAdmin =
 					ControlerAssento.assentosBloqueados
 							.contains(nomeAssento);
-			
-		
+
 			// ================= ASSENTO OCUPADO CLIENTE =================
 			boolean ocupadoCliente =
 					IngressoDAO.assentoOcupado(
 							filme,
 							horario,
 							tipo,
+							data,
 							nomeAssento
 					);
 
@@ -138,7 +147,7 @@ public class assento extends JFrame {
 					" | Cliente: " + ocupadoCliente
 			);
 
-			// ================= BLOQUEIO CORRETO =================
+			// ================= BLOQUEIO =================
 			if (ocupadoCliente) {
 
 				btnAssento.setBackground(new Color(120,0,0));
@@ -147,20 +156,19 @@ public class assento extends JFrame {
 
 				btnAssento.setEnabled(false);
 
-			} 
+			}
 			else if (bloqueadoAdmin) {
 
 				btnAssento.setBackground(Color.RED);
 
 				btnAssento.setForeground(Color.WHITE);
 
-				btnAssento.setEnabled(true); // permite clicar para desbloquear
+				btnAssento.setEnabled(true);
 			}
 
 			// ================= SELECIONAR ASSENTO =================
 			btnAssento.addActionListener(e -> {
 
-				// remove seleção anterior
 				if (assentoSelecionadoBtn != null) {
 
 					assentoSelecionadoBtn.setBackground(
@@ -172,7 +180,6 @@ public class assento extends JFrame {
 					);
 				}
 
-				// nova seleção
 				assentoSelecionadoBtn =
 						btnAssento;
 
@@ -209,12 +216,13 @@ public class assento extends JFrame {
 				return;
 			}
 
-			// 🔥 VERIFICA NOVAMENTE ANTES DE PAGAR
+			// ================= VERIFICA NOVAMENTE =================
 			if (
 					IngressoDAO.assentoOcupado(
 							filme,
 							horario,
 							tipo,
+							data,
 							assentoSelecionado
 					)
 			) {
@@ -227,7 +235,8 @@ public class assento extends JFrame {
 				new assento(
 						filme,
 						horario,
-						tipo
+						tipo,
+						data
 				).setVisible(true);
 
 				dispose();
@@ -240,7 +249,8 @@ public class assento extends JFrame {
 							filme,
 							horario,
 							assentoSelecionado,
-							tipo
+							tipo,
+							data
 					);
 
 			telaPagamento.setVisible(true);
@@ -307,7 +317,6 @@ public class assento extends JFrame {
 
 		contentPane.add(lbl3);
 
-		// 🔥 FUNDO ATRÁS
 		contentPane.setComponentZOrder(
 				lbl3,
 				contentPane.getComponentCount() - 1

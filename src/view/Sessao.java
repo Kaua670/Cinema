@@ -340,6 +340,12 @@ public class Sessao extends JFrame {
 		fundo.setBounds(-22, -45, 2964, 1326);
 
 		contentPane.add(fundo);
+
+		// ===== FUNDO ATRÁS =====
+		contentPane.setComponentZOrder(
+				fundo,
+				contentPane.getComponentCount() - 1
+		);
 	}
 
 	// ================= ABRIR ASSENTO =================
@@ -350,7 +356,8 @@ public class Sessao extends JFrame {
 				new assento(
 						filme,
 						horarioSelecionado,
-						tipoSelecionado
+						tipoSelecionado,
+						diaSelecionado
 				);
 
 		telaAssento.setVisible(true);

@@ -20,6 +20,7 @@ public class pagamento extends JFrame {
 	private String horario;
 	private String assento;
 	private String tipo;
+	private String data;
 
 	private JTextField txtValor;
 
@@ -39,7 +40,8 @@ public class pagamento extends JFrame {
 			String filme,
 			String horario,
 			String assento,
-			String tipo
+			String tipo,
+			String data
 	) {
 
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -48,6 +50,7 @@ public class pagamento extends JFrame {
 		this.horario = horario;
 		this.assento = assento;
 		this.tipo = tipo;
+		this.data = data;
 
 		setTitle("Pagamento");
 
@@ -63,7 +66,7 @@ public class pagamento extends JFrame {
 
 		setContentPane(contentPane);
 
-		// ===== TEXTOS =====
+		// ===== FILME =====
 		JLabel lblFilme =
 				new JLabel("Filme: " + filme);
 
@@ -77,10 +80,11 @@ public class pagamento extends JFrame {
 
 		lblFilme.setForeground(Color.WHITE);
 
-		lblFilme.setBounds(655, 401, 300, 25);
+		lblFilme.setBounds(655, 401, 400, 25);
 
 		contentPane.add(lblFilme);
 
+		// ===== SESSÃO =====
 		JLabel lblSessao =
 				new JLabel("Sessão: " + horario);
 
@@ -94,10 +98,29 @@ public class pagamento extends JFrame {
 
 		lblSessao.setForeground(Color.WHITE);
 
-		lblSessao.setBounds(655, 437, 300, 25);
+		lblSessao.setBounds(655, 437, 400, 25);
 
 		contentPane.add(lblSessao);
 
+		// ===== DATA =====
+		JLabel lblData =
+				new JLabel("Data: " + data);
+
+		lblData.setFont(
+				new Font(
+						"Tahoma",
+						Font.PLAIN,
+						20
+				)
+		);
+
+		lblData.setForeground(Color.WHITE);
+
+		lblData.setBounds(655, 473, 400, 25);
+
+		contentPane.add(lblData);
+
+		// ===== ASSENTO =====
 		JLabel lblAssento =
 				new JLabel("Assento: " + assento);
 
@@ -111,10 +134,11 @@ public class pagamento extends JFrame {
 
 		lblAssento.setForeground(Color.WHITE);
 
-		lblAssento.setBounds(655, 473, 300, 25);
+		lblAssento.setBounds(655, 509, 400, 25);
 
 		contentPane.add(lblAssento);
 
+		// ===== TIPO =====
 		JLabel lblTipo =
 				new JLabel("Tipo: " + tipo);
 
@@ -128,10 +152,11 @@ public class pagamento extends JFrame {
 
 		lblTipo.setForeground(Color.WHITE);
 
-		lblTipo.setBounds(655, 509, 300, 25);
+		lblTipo.setBounds(655, 545, 400, 25);
 
 		contentPane.add(lblTipo);
 
+		// ===== VALOR =====
 		JLabel lblValor =
 				new JLabel("Valor:");
 
@@ -145,14 +170,13 @@ public class pagamento extends JFrame {
 
 		lblValor.setForeground(Color.WHITE);
 
-		lblValor.setBounds(655, 545, 80, 25);
+		lblValor.setBounds(655, 581, 80, 25);
 
 		contentPane.add(lblValor);
 
-		// ===== CAMPO VALOR =====
 		txtValor = new JTextField();
 
-		txtValor.setBounds(718, 545, 140, 25);
+		txtValor.setBounds(718, 581, 140, 25);
 
 		txtValor.setEditable(false);
 
@@ -165,9 +189,7 @@ public class pagamento extends JFrame {
 				new JComboBox<>();
 
 		comboPagamento.addItem("Dinheiro");
-
 		comboPagamento.addItem("Cartão");
-
 		comboPagamento.addItem("PIX");
 
 		comboPagamento.setBounds(655, 631, 228, 25);
@@ -179,7 +201,6 @@ public class pagamento extends JFrame {
 				new JComboBox<>();
 
 		comboTipoCartao.addItem("Débito");
-
 		comboTipoCartao.addItem("Crédito");
 
 		comboTipoCartao.setBounds(655, 689, 228, 25);
@@ -193,9 +214,7 @@ public class pagamento extends JFrame {
 				new JComboBox<>();
 
 		comboParcelas.addItem("1x");
-
 		comboParcelas.addItem("2x");
-
 		comboParcelas.addItem("3x");
 
 		comboParcelas.setBounds(655, 725, 228, 25);
@@ -204,66 +223,7 @@ public class pagamento extends JFrame {
 
 		contentPane.add(comboParcelas);
 
-		// ===== EVENTO PAGAMENTO =====
-		comboPagamento.addActionListener(e -> {
-
-			String tipoPagamento =
-					comboPagamento
-							.getSelectedItem()
-							.toString();
-
-			if (tipoPagamento.equals("Cartão")) {
-
-				comboTipoCartao.setEnabled(true);
-
-				comboParcelas.setEnabled(true);
-
-				PIX20.setVisible(false);
-
-				PIX30.setVisible(false);
-
-				btnConfirmarPix.setVisible(false);
-
-			}
-
-			else if (tipoPagamento.equals("PIX")) {
-
-				comboTipoCartao.setEnabled(false);
-
-				comboParcelas.setEnabled(false);
-
-				btnConfirmarPix.setVisible(true);
-
-				if (tipo.equals("2D")) {
-
-					PIX20.setVisible(true);
-
-					PIX30.setVisible(false);
-
-				} else {
-
-					PIX20.setVisible(false);
-
-					PIX30.setVisible(true);
-				}
-
-			}
-
-			else {
-
-				comboTipoCartao.setEnabled(false);
-
-				comboParcelas.setEnabled(false);
-
-				PIX20.setVisible(false);
-
-				PIX30.setVisible(false);
-
-				btnConfirmarPix.setVisible(false);
-			}
-		});
-
-		// ===== QR CODE 20 =====
+		// ===== QR 20 =====
 		PIX20 = new JLabel();
 
 		PIX20.setIcon(
@@ -278,7 +238,7 @@ public class pagamento extends JFrame {
 
 		contentPane.add(PIX20);
 
-		// ===== QR CODE 30 =====
+		// ===== QR 30 =====
 		PIX30 = new JLabel();
 
 		PIX30.setIcon(
@@ -305,7 +265,7 @@ public class pagamento extends JFrame {
 
 		contentPane.add(btnFinalizar);
 
-		// ===== BOTÃO CONFIRMAR PIX =====
+		// ===== BOTÃO PIX =====
 		btnConfirmarPix =
 				new JButton("Confirmar PIX");
 
@@ -317,8 +277,6 @@ public class pagamento extends JFrame {
 
 			pagamentoPixConfirmado = true;
 
-			btnFinalizar.setEnabled(true);
-
 			JOptionPane.showMessageDialog(
 					this,
 					"PIX confirmado!"
@@ -326,6 +284,63 @@ public class pagamento extends JFrame {
 		});
 
 		contentPane.add(btnConfirmarPix);
+
+		// ===== EVENTO PAGAMENTO =====
+		comboPagamento.addActionListener(e -> {
+
+			String tipoPagamento =
+					comboPagamento
+							.getSelectedItem()
+							.toString();
+
+			if (tipoPagamento.equals("Cartão")) {
+
+				comboTipoCartao.setEnabled(true);
+
+				comboParcelas.setEnabled(true);
+
+				PIX20.setVisible(false);
+
+				PIX30.setVisible(false);
+
+				btnConfirmarPix.setVisible(false);
+			}
+
+			else if (tipoPagamento.equals("PIX")) {
+
+				comboTipoCartao.setEnabled(false);
+
+				comboParcelas.setEnabled(false);
+
+				btnConfirmarPix.setVisible(true);
+
+				if (tipo.equals("2D")) {
+
+					PIX20.setVisible(true);
+
+					PIX30.setVisible(false);
+
+				} else {
+
+					PIX20.setVisible(false);
+
+					PIX30.setVisible(true);
+				}
+			}
+
+			else {
+
+				comboTipoCartao.setEnabled(false);
+
+				comboParcelas.setEnabled(false);
+
+				PIX20.setVisible(false);
+
+				PIX30.setVisible(false);
+
+				btnConfirmarPix.setVisible(false);
+			}
+		});
 
 		// ===== BOTÃO VOLTAR =====
 		JButton btnVoltar =
@@ -338,7 +353,8 @@ public class pagamento extends JFrame {
 			new assento(
 					filme,
 					horario,
-					tipo
+					tipo,
+					data
 			).setVisible(true);
 
 			dispose();
@@ -352,9 +368,47 @@ public class pagamento extends JFrame {
 
 		btnImprimir.setBounds(655, 911, 133, 43);
 
-		btnImprimir.addActionListener(
-				e -> imprimirRelatorio("Teste")
-		);
+		btnImprimir.addActionListener(e -> {
+
+			String texto =
+
+					"CINE LUMI\n\n"
+
+					+ "===== RELATÓRIO =====\n\n"
+
+					+ "Cliente: "
+					+ SessaoUsuario.usuarioLogado
+					+ "\n\n"
+
+					+ "Filme: "
+					+ filme
+					+ "\n"
+
+					+ "Sessão: "
+					+ horario
+					+ "\n"
+
+					+ "Data: "
+					+ data
+					+ "\n"
+
+					+ "Tipo: "
+					+ tipo
+					+ "\n"
+
+					+ "Assento: "
+					+ assento
+					+ "\n"
+
+					+ "Pagamento: "
+					+ comboPagamento.getSelectedItem()
+					+ "\n"
+
+					+ "Valor: R$ "
+					+ txtValor.getText();
+
+			imprimirRelatorio(texto);
+		});
 
 		contentPane.add(btnImprimir);
 
@@ -386,7 +440,6 @@ public class pagamento extends JFrame {
 
 		contentPane.add(bg);
 
-		// ===== FUNDO ATRÁS =====
 		contentPane.setComponentZOrder(
 				bg,
 				contentPane.getComponentCount() - 1
@@ -412,10 +465,9 @@ public class pagamento extends JFrame {
 		);
 	}
 
-	// ===== FINALIZAR PAGAMENTO =====
+	// ===== FINALIZAR =====
 	private void finalizarPagamento() {
 
-		// ===== PIX NÃO CONFIRMADO =====
 		if (
 				comboPagamento
 						.getSelectedItem()
@@ -431,24 +483,46 @@ public class pagamento extends JFrame {
 			return;
 		}
 
+		// ===== VERIFICA SE ASSENTO JÁ FOI COMPRADO =====
+		if (
+				IngressoDAO.assentoOcupado(
+						filme,
+						horario,
+						tipo,
+						data,
+						assento
+				)
+		) {
+
+			JOptionPane.showMessageDialog(
+					this,
+					"Esse assento já foi comprado!"
+			);
+
+			return;
+		}
+
 		// ===== SALVA ASSENTO =====
 		AssentoDAO.salvarAssento(
 				filme,
 				horario,
 				tipo,
+				data,
 				assento
 		);
 
+		// ===== SALVA INGRESSO =====
 		IngressoDAO.salvarIngresso(
-		        SessaoUsuario.usuarioLogado,
-		        filme,
-		        horario,
-		        tipo,
-		        assento,
-		        comboPagamento.getSelectedItem().toString(),
-		        txtValor.getText()
+				SessaoUsuario.usuarioLogado,
+				filme,
+				horario,
+				tipo,
+				data,
+				assento,
+				comboPagamento.getSelectedItem().toString(),
+				txtValor.getText()
 		);
-		// ===== RELATÓRIO =====
+
 		String relatorio =
 
 				"CINE LUMI\n\n"
@@ -465,6 +539,10 @@ public class pagamento extends JFrame {
 
 				+ "Sessão: "
 				+ horario
+				+ "\n"
+
+				+ "Data: "
+				+ data
 				+ "\n"
 
 				+ "Tipo: "
@@ -487,7 +565,6 @@ public class pagamento extends JFrame {
 				relatorio
 		);
 
-		// ===== IMPRIMIR =====
 		int op =
 				JOptionPane.showConfirmDialog(
 						this,
@@ -499,7 +576,6 @@ public class pagamento extends JFrame {
 			imprimirRelatorio(relatorio);
 		}
 
-		// ===== VOLTA TELA =====
 		new Ingresso().setVisible(true);
 
 		dispose();
@@ -516,6 +592,11 @@ public class pagamento extends JFrame {
 			area.print();
 
 		} catch (PrinterException e) {
+
+			JOptionPane.showMessageDialog(
+					this,
+					"Erro ao imprimir!"
+			);
 
 			e.printStackTrace();
 		}
