@@ -121,14 +121,14 @@ public class Sessao extends JFrame {
 				)
 		);
 
-		lblData.setBounds(703, 651, 250, 30);
+		lblData.setBounds(789, 349, 250, 30);
 
 		contentPane.add(lblData);
 
 		campoData =
 				new JTextField();
 
-		campoData.setBounds(844, 647, 250, 40);
+		campoData.setBounds(917, 345, 250, 40);
 
 		campoData.setFont(
 				new Font(
@@ -155,7 +155,7 @@ public class Sessao extends JFrame {
 				)
 		);
 
-		btn14.setBounds(742, 407, 138, 50);
+		btn14.setBounds(742, 428, 138, 50);
 
 		contentPane.add(btn14);
 
@@ -170,7 +170,7 @@ public class Sessao extends JFrame {
 				)
 		);
 
-		btn18.setBounds(1053, 407, 138, 50);
+		btn18.setBounds(1053, 428, 138, 50);
 
 		contentPane.add(btn18);
 
@@ -187,7 +187,7 @@ public class Sessao extends JFrame {
 				)
 		);
 
-		btn2D.setBounds(742, 480, 138, 50);
+		btn2D.setBounds(742, 507, 138, 50);
 
 		btn2D.setVisible(false);
 
@@ -204,7 +204,7 @@ public class Sessao extends JFrame {
 				)
 		);
 
-		btn3D.setBounds(1053, 480, 138, 50);
+		btn3D.setBounds(1053, 507, 138, 50);
 
 		btn3D.setVisible(false);
 
@@ -289,7 +289,7 @@ public class Sessao extends JFrame {
 				)
 		);
 
-		btnVoltar.setBounds(896, 580, 143, 57);
+		btnVoltar.setBounds(896, 598, 143, 57);
 
 		btnVoltar.addActionListener(e -> {
 
