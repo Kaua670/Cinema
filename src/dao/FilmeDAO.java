@@ -24,13 +24,23 @@ public class FilmeDAO {
 
             while (rs.next()) {
 
+                // pega somente o nome da imagem do banco
+            	String imagemBanco =
+            	        rs.getString("imagem");
+
+            	String nomeImagem =
+            	        new java.io.File(imagemBanco).getName();
+
+            	String caminhoImagem =
+            	        "images/" + nomeImagem;
+
                 String[] filme = {
 
                         rs.getString("nome"),
 
                         rs.getString("classificacao"),
 
-                        rs.getString("imagem")
+                        caminhoImagem
                 };
 
                 lista.add(filme);
@@ -63,6 +73,7 @@ public class FilmeDAO {
 
             stmt.setString(2, classificacao);
 
+            // salva somente o nome da imagem
             stmt.setString(3, imagem);
 
             stmt.executeUpdate();
