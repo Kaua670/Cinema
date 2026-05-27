@@ -89,6 +89,44 @@ public class IngressoDAO {
 		return false;
 	}
 
+	// ================= REMOVER INGRESSO =================
+	public static void removerIngresso(
+			String filme,
+			String horario,
+			String tipo,
+			String data,
+			String assento
+	) {
+
+		String sql =
+				"DELETE FROM ingressos "
+				+ "WHERE filme=? "
+				+ "AND horario=? "
+				+ "AND tipo=? "
+				+ "AND data_sessao=? "
+				+ "AND assento=?";
+
+		try (
+				Connection conn = Banco.getConnection();
+				PreparedStatement stmt = conn.prepareStatement(sql)
+		) {
+
+			stmt.setString(1, filme);
+			stmt.setString(2, horario);
+			stmt.setString(3, tipo);
+			stmt.setString(4, data);
+			stmt.setString(5, assento);
+
+			stmt.executeUpdate();
+
+			System.out.println("INGRESSO REMOVIDO!");
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+	}
+
 	// ================= RELATÓRIO =================
 	public static List<String> listarRelatorio() {
 

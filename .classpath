@@ -6,10 +6,11 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="C:/Users/nilton62394336/Downloads/sqlite-jdbc-3.51.2.0 (1).jar">
-		<attributes>
-			<attribute name="module" value="true"/>
-		</attributes>
-	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
+	<classpathentry kind="lib" path="C:/Users/tatia/eclipse-workspace/Cinema/byte-buddy-1.18.8.jar"/>
+	<classpathentry kind="lib" path="C:/Users/tatia/eclipse-workspace/Cinema/byte-buddy-agent-1.18.8.jar"/>
+	<classpathentry kind="lib" path="C:/Users/tatia/eclipse-workspace/Cinema/mockito-core-5.23.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/tatia/eclipse-workspace/Cinema/objenesis-3.5.jar"/>
+	<classpathentry kind="lib" path="C:/Users/tatia/eclipse-workspace/Cinema/sqlite-jdbc-3.51.2.0 (2).jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
