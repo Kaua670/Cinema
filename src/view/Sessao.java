@@ -10,6 +10,17 @@ import java.awt.Color;
 import java.awt.Font;
 import javax.swing.ImageIcon;
 import javax.swing.JTextField;
+import javax.swing.JOptionPane;
+
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DocumentFilter;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.time.format.ResolverStyle;
 
 public class Sessao extends JFrame {
 
@@ -25,6 +36,10 @@ public class Sessao extends JFrame {
 	private String diaSelecionado;
 
 	private JTextField campoData;
+
+	private static final DateTimeFormatter FORMATADOR_DATA =
+			DateTimeFormatter.ofPattern("dd/MM/uuuu")
+					.withResolverStyle(ResolverStyle.STRICT);
 
 	public static void main(String[] args) {
 
@@ -109,7 +124,7 @@ public class Sessao extends JFrame {
 		// ================= DATA =================
 
 		JLabel lblData =
-				new JLabel("Digite a Data:");
+				new JLabel("Data:");
 
 		lblData.setForeground(Color.WHITE);
 
@@ -138,7 +153,15 @@ public class Sessao extends JFrame {
 				)
 		);
 
-		campoData.setText("dd/mm/yy");
+		// Traz automaticamente a data do dia atual
+		campoData.setText(
+				LocalDate.now().format(FORMATADOR_DATA)
+		);
+
+		// Limita e formata o campo para dd/MM/yyyy
+		((AbstractDocument) campoData.getDocument()).setDocumentFilter(
+				new FiltroData()
+		);
 
 		contentPane.add(campoData);
 
@@ -214,18 +237,12 @@ public class Sessao extends JFrame {
 
 		btn14.addActionListener(e -> {
 
-			diaSelecionado =
-					campoData.getText();
-
-			if (diaSelecionado.isEmpty()) {
-
-				javax.swing.JOptionPane.showMessageDialog(
-						null,
-						"Digite uma data!"
-				);
-
+			if (!validarData()) {
 				return;
 			}
+
+			diaSelecionado =
+					campoData.getText();
 
 			horarioSelecionado = "14:00";
 
@@ -238,18 +255,12 @@ public class Sessao extends JFrame {
 
 		btn18.addActionListener(e -> {
 
-			diaSelecionado =
-					campoData.getText();
-
-			if (diaSelecionado.isEmpty()) {
-
-				javax.swing.JOptionPane.showMessageDialog(
-						null,
-						"Digite uma data!"
-				);
-
+			if (!validarData()) {
 				return;
 			}
+
+			diaSelecionado =
+					campoData.getText();
 
 			horarioSelecionado = "18:00";
 
@@ -346,6 +357,182 @@ public class Sessao extends JFrame {
 				fundo,
 				contentPane.getComponentCount() - 1
 		);
+	}
+
+	// ================= VALIDAR DATA =================
+
+	private boolean validarData() {
+
+		String data =
+				campoData.getText().trim();
+
+		if (data.isEmpty() || data.length() != 10) {
+
+			JOptionPane.showMessageDialog(
+					null,
+					"Informe uma data válida no formato dd/MM/yyyy."
+			);
+
+			campoData.requestFocus();
+
+			return false;
+		}
+
+		try {
+
+			LocalDate dataInformada =
+					LocalDate.parse(data, FORMATADOR_DATA);
+
+			LocalDate dataAtual =
+					LocalDate.now();
+
+			if (dataInformada.isBefore(dataAtual)) {
+
+				JOptionPane.showMessageDialog(
+						null,
+						"Não é permitido escolher uma data anterior ao dia de hoje."
+				);
+
+				campoData.setText(
+						dataAtual.format(FORMATADOR_DATA)
+				);
+
+				campoData.requestFocus();
+
+				return false;
+			}
+
+			return true;
+
+		} catch (DateTimeParseException e) {
+
+			JOptionPane.showMessageDialog(
+					null,
+					"Data inválida. Verifique o dia, mês e ano.\nExemplo: fevereiro não aceita dia 30 ou 31."
+			);
+
+			campoData.requestFocus();
+
+			return false;
+		}
+	}
+
+	// ================= FILTRO DO CAMPO DATA =================
+
+	private static class FiltroData extends DocumentFilter {
+
+		@Override
+		public void insertString(
+				FilterBypass fb,
+				int offset,
+				String string,
+				AttributeSet attr
+		) throws BadLocationException {
+
+			replace(fb, offset, 0, string, attr);
+		}
+
+		@Override
+		public void replace(
+				FilterBypass fb,
+				int offset,
+				int length,
+				String text,
+				AttributeSet attrs
+		) throws BadLocationException {
+
+			String textoAtual =
+					fb.getDocument().getText(
+							0,
+							fb.getDocument().getLength()
+					);
+
+			StringBuilder novoTexto =
+					new StringBuilder(textoAtual);
+
+			novoTexto.replace(
+					offset,
+					offset + length,
+					text == null ? "" : text
+			);
+
+			String somenteNumeros =
+					novoTexto.toString().replaceAll("[^0-9]", "");
+
+			if (somenteNumeros.length() > 8) {
+
+				somenteNumeros =
+						somenteNumeros.substring(0, 8);
+			}
+
+			String textoFormatado =
+					formatarData(somenteNumeros);
+
+			fb.replace(
+					0,
+					fb.getDocument().getLength(),
+					textoFormatado,
+					attrs
+			);
+		}
+
+		@Override
+		public void remove(
+				FilterBypass fb,
+				int offset,
+				int length
+		) throws BadLocationException {
+
+			String textoAtual =
+					fb.getDocument().getText(
+							0,
+							fb.getDocument().getLength()
+					);
+
+			StringBuilder novoTexto =
+					new StringBuilder(textoAtual);
+
+			novoTexto.delete(
+					offset,
+					offset + length
+			);
+
+			String somenteNumeros =
+					novoTexto.toString().replaceAll("[^0-9]", "");
+
+			if (somenteNumeros.length() > 8) {
+
+				somenteNumeros =
+						somenteNumeros.substring(0, 8);
+			}
+
+			String textoFormatado =
+					formatarData(somenteNumeros);
+
+			fb.replace(
+					0,
+					fb.getDocument().getLength(),
+					textoFormatado,
+					null
+			);
+		}
+
+		private static String formatarData(String numeros) {
+
+			StringBuilder sb =
+					new StringBuilder();
+
+			for (int i = 0; i < numeros.length(); i++) {
+
+				if (i == 2 || i == 4) {
+					sb.append("/");
+				}
+
+				sb.append(numeros.charAt(i));
+			}
+
+			return sb.toString();
+		}
 	}
 
 	// ================= ABRIR ASSENTO =================
