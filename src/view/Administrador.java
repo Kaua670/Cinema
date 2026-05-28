@@ -491,40 +491,6 @@ public class Administrador extends JFrame {
 			}
 		});
 
-		// ================= BOTÃO DESBLOQUEAR ASSENTOS =================
-
-		JButton btnDesbloquear =
-				new JButton("Desbloquear Assentos");
-
-		btnDesbloquear.setBounds(1180, 570, 220, 50);
-
-		contentPane.add(btnDesbloquear);
-
-		btnDesbloquear.addActionListener(e -> {
-
-			if (assentosTemp.isEmpty()) {
-
-				JOptionPane.showMessageDialog(
-						null,
-						"Selecione os assentos para desbloquear!"
-				);
-
-				return;
-			}
-
-			// remove da lista de bloqueados
-			ControlerAssento.assentosBloqueados.removeAll(assentosTemp);
-
-			assentosTemp.clear();
-
-			JOptionPane.showMessageDialog(
-					null,
-					"Assentos desbloqueados com sucesso!"
-			);
-
-			carregarAssentos();
-		});
-
 		// ================= RELATÓRIO =================
 
 		JButton btnRelatorio =
@@ -749,70 +715,101 @@ public class Administrador extends JFrame {
 			// ================= CLICK ASSENTO =================
 			btn.addActionListener(e -> {
 
-				// ================= NÃO ALTERA COMPRADO =================
-				if (
-						IngressoDAO.assentoOcupado(
-								filme,
-								horario,
-								tipo,
-								data,
-								a
-						)
-				) {
+			    // ================= ASSENTO COMPRADO =================
+			    if (
+			            IngressoDAO.assentoOcupado(
+			                    filme,
+			                    horario,
+			                    tipo,
+			                    data,
+			                    a
+			            )
+			    ) {
 
-					JOptionPane.showMessageDialog(
-							null,
-							"Assento já comprado!"
-					);
+			        int op =
+			                JOptionPane.showConfirmDialog(
+			                        null,
+			                        "Deseja desbloquear esse assento comprado?"
+			                );
 
-					return;
-				}
+			        if (op == JOptionPane.YES_OPTION) {
 
-				// ================= DESBLOQUEAR =================
-				if (
-						AssentoDAO.assentoOcupado(
-								filme,
-								horario,
-								tipo,
-								data,
-								a
-						)
-				) {
+			            // remove ingresso
+			            IngressoDAO.removerIngresso(
+			                    filme,
+			                    horario,
+			                    tipo,
+			                    data,
+			                    a
+			            );
 
-					AssentoDAO.removerAssento(
-							filme,
-							horario,
-							tipo,
-							data,
-							a
-					);
+			            // remove bloqueio
+			            AssentoDAO.removerAssento(
+			                    filme,
+			                    horario,
+			                    tipo,
+			                    data,
+			                    a
+			            );
 
-					btn.setBackground(Color.GRAY);
+			            btn.setBackground(Color.GRAY);
 
-					JOptionPane.showMessageDialog(
-							null,
-							"Assento desbloqueado!"
-					);
-				}
+			            btn.setText(a);
 
-				// ================= BLOQUEAR =================
-				else {
+			            JOptionPane.showMessageDialog(
+			                    null,
+			                    "Assento desbloqueado!"
+			            );
+			        }
 
-					AssentoDAO.salvarAssento(
-							filme,
-							horario,
-							tipo,
-							data,
-							a
-					);
+			        return;
+			    }
 
-					btn.setBackground(Color.RED);
+			    // ================= DESBLOQUEAR =================
+			    if (
+			            AssentoDAO.assentoOcupado(
+			                    filme,
+			                    horario,
+			                    tipo,
+			                    data,
+			                    a
+			            )
+			    ) {
 
-					JOptionPane.showMessageDialog(
-							null,
-							"Assento bloqueado!"
-					);
-				}
+			        AssentoDAO.removerAssento(
+			                filme,
+			                horario,
+			                tipo,
+			                data,
+			                a
+			        );
+
+			        btn.setBackground(Color.GRAY);
+
+			        JOptionPane.showMessageDialog(
+			                null,
+			                "Assento desbloqueado!"
+			        );
+			    }
+
+			    // ================= BLOQUEAR =================
+			    else {
+
+			        AssentoDAO.salvarAssento(
+			                filme,
+			                horario,
+			                tipo,
+			                data,
+			                a
+			        );
+
+			        btn.setBackground(Color.RED);
+
+			        JOptionPane.showMessageDialog(
+			                null,
+			                "Assento bloqueado!"
+			        );
+			    }
 			});
 
 			painelAssentos.add(btn);

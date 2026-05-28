@@ -138,7 +138,7 @@ public class Sessao extends JFrame {
 				)
 		);
 
-		campoData.setText("01/06/2026");
+		campoData.setText("dd/mm/yy");
 
 		contentPane.add(campoData);
 

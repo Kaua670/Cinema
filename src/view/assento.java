@@ -127,45 +127,49 @@ public class assento extends JFrame {
 
 			// ================= ASSENTO BLOQUEADO ADMIN =================
 			boolean bloqueadoAdmin =
-					ControlerAssento.assentosBloqueados
-							.contains(nomeAssento);
+			        dao.AssentoDAO.assentoOcupado(
+			                filme,
+			                horario,
+			                tipo,
+			                data,
+			                nomeAssento
+			        );
 
 			// ================= ASSENTO OCUPADO CLIENTE =================
 			boolean ocupadoCliente =
-					IngressoDAO.assentoOcupado(
-							filme,
-							horario,
-							tipo,
-							data,
-							nomeAssento
-					);
+			        IngressoDAO.assentoOcupado(
+			                filme,
+			                horario,
+			                tipo,
+			                data,
+			                nomeAssento
+			        );
 
 			// ================= DEBUG =================
 			System.out.println(
-					nomeAssento +
-					" -> Admin: " + bloqueadoAdmin +
-					" | Cliente: " + ocupadoCliente
+			        nomeAssento +
+			        " -> Admin: " + bloqueadoAdmin +
+			        " | Cliente: " + ocupadoCliente
 			);
 
 			// ================= BLOQUEIO =================
 			if (ocupadoCliente) {
 
-				btnAssento.setBackground(new Color(120,0,0));
+			    btnAssento.setBackground(new Color(120,0,0));
 
-				btnAssento.setForeground(Color.WHITE);
+			    btnAssento.setForeground(Color.WHITE);
 
-				btnAssento.setEnabled(false);
+			    btnAssento.setEnabled(false);
 
 			}
 			else if (bloqueadoAdmin) {
 
-				btnAssento.setBackground(Color.RED);
+			    btnAssento.setBackground(Color.RED);
 
-				btnAssento.setForeground(Color.WHITE);
+			    btnAssento.setForeground(Color.WHITE);
 
-				btnAssento.setEnabled(true);
+			    btnAssento.setEnabled(false);
 			}
-
 			// ================= SELECIONAR ASSENTO =================
 			btnAssento.addActionListener(e -> {
 
