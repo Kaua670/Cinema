@@ -2,6 +2,8 @@ package view;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.Clipboard;
 import java.awt.print.PrinterException;
 
 import Controle.ControlePreco;
@@ -33,6 +35,10 @@ public class pagamento extends JFrame {
 
 	private JButton btnFinalizar;
 	private JButton btnConfirmarPix;
+
+	private JTextField txtCodigoPix;
+	private JButton btnCopiarPix;
+	private JLabel lblCodigoPix;
 
 	private boolean pagamentoPixConfirmado = false;
 
@@ -223,6 +229,48 @@ public class pagamento extends JFrame {
 
 		contentPane.add(comboParcelas);
 
+		// ===== CÓDIGO PIX COPIA E COLA =====
+		lblCodigoPix =
+				new JLabel("PIX copia e cola:");
+
+		lblCodigoPix.setFont(
+				new Font(
+						"Tahoma",
+						Font.PLAIN,
+						16
+				)
+		);
+
+		lblCodigoPix.setForeground(Color.WHITE);
+
+		lblCodigoPix.setBounds(965, 760, 200, 25);
+
+		lblCodigoPix.setVisible(false);
+
+		contentPane.add(lblCodigoPix);
+
+		txtCodigoPix =
+				new JTextField();
+
+		txtCodigoPix.setBounds(965, 790, 392, 30);
+
+		txtCodigoPix.setEditable(false);
+
+		txtCodigoPix.setVisible(false);
+
+		contentPane.add(txtCodigoPix);
+
+		btnCopiarPix =
+				new JButton("Copiar código PIX");
+
+		btnCopiarPix.setBounds(965, 830, 180, 35);
+
+		btnCopiarPix.setVisible(false);
+
+		btnCopiarPix.addActionListener(e -> copiarCodigoPix());
+
+		contentPane.add(btnCopiarPix);
+
 		// ===== QR 20 =====
 		PIX20 = new JLabel();
 
@@ -286,61 +334,10 @@ public class pagamento extends JFrame {
 		contentPane.add(btnConfirmarPix);
 
 		// ===== EVENTO PAGAMENTO =====
-		comboPagamento.addActionListener(e -> {
+		comboPagamento.addActionListener(e -> atualizarFormaPagamento());
 
-			String tipoPagamento =
-					comboPagamento
-							.getSelectedItem()
-							.toString();
-
-			if (tipoPagamento.equals("Cartão")) {
-
-				comboTipoCartao.setEnabled(true);
-
-				comboParcelas.setEnabled(true);
-
-				PIX20.setVisible(false);
-
-				PIX30.setVisible(false);
-
-				btnConfirmarPix.setVisible(false);
-			}
-
-			else if (tipoPagamento.equals("PIX")) {
-
-				comboTipoCartao.setEnabled(false);
-
-				comboParcelas.setEnabled(false);
-
-				btnConfirmarPix.setVisible(true);
-
-				if (tipo.equals("2D")) {
-
-					PIX20.setVisible(true);
-
-					PIX30.setVisible(false);
-
-				} else {
-
-					PIX20.setVisible(false);
-
-					PIX30.setVisible(true);
-				}
-			}
-
-			else {
-
-				comboTipoCartao.setEnabled(false);
-
-				comboParcelas.setEnabled(false);
-
-				PIX20.setVisible(false);
-
-				PIX30.setVisible(false);
-
-				btnConfirmarPix.setVisible(false);
-			}
-		});
+		// ===== EVENTO TIPO CARTÃO =====
+		comboTipoCartao.addActionListener(e -> atualizarParcelasCartao());
 
 		// ===== BOTÃO VOLTAR =====
 		JButton btnVoltar =
@@ -465,6 +462,172 @@ public class pagamento extends JFrame {
 		);
 	}
 
+	// ===== ATUALIZA FORMA DE PAGAMENTO =====
+	private void atualizarFormaPagamento() {
+
+		pagamentoPixConfirmado = false;
+
+		String tipoPagamento =
+				comboPagamento
+						.getSelectedItem()
+						.toString();
+
+		if (tipoPagamento.equals("Cartão")) {
+
+			comboTipoCartao.setEnabled(true);
+
+			atualizarParcelasCartao();
+
+			PIX20.setVisible(false);
+
+			PIX30.setVisible(false);
+
+			btnConfirmarPix.setVisible(false);
+
+			lblCodigoPix.setVisible(false);
+
+			txtCodigoPix.setVisible(false);
+
+			btnCopiarPix.setVisible(false);
+
+			txtCodigoPix.setText("");
+		}
+
+		else if (tipoPagamento.equals("PIX")) {
+
+			comboTipoCartao.setEnabled(false);
+
+			comboParcelas.setEnabled(false);
+
+			comboParcelas.setSelectedItem("1x");
+
+			btnConfirmarPix.setVisible(true);
+
+			if (tipo.equals("2D")) {
+
+				PIX20.setVisible(true);
+
+				PIX30.setVisible(false);
+
+			} else {
+
+				PIX20.setVisible(false);
+
+				PIX30.setVisible(true);
+			}
+
+			String codigoPix =
+					gerarCodigoPix();
+
+			txtCodigoPix.setText(codigoPix);
+
+			lblCodigoPix.setVisible(true);
+
+			txtCodigoPix.setVisible(true);
+
+			btnCopiarPix.setVisible(true);
+		}
+
+		else {
+
+			comboTipoCartao.setEnabled(false);
+
+			comboParcelas.setEnabled(false);
+
+			comboParcelas.setSelectedItem("1x");
+
+			PIX20.setVisible(false);
+
+			PIX30.setVisible(false);
+
+			btnConfirmarPix.setVisible(false);
+
+			lblCodigoPix.setVisible(false);
+
+			txtCodigoPix.setVisible(false);
+
+			btnCopiarPix.setVisible(false);
+
+			txtCodigoPix.setText("");
+		}
+	}
+
+	// ===== PARCELAS DO CARTÃO =====
+	private void atualizarParcelasCartao() {
+
+		String tipoCartao =
+				comboTipoCartao
+						.getSelectedItem()
+						.toString();
+
+		if (tipoCartao.equals("Débito")) {
+
+			comboParcelas.setSelectedItem("1x");
+
+			comboParcelas.setEnabled(false);
+
+		} else {
+
+			comboParcelas.setEnabled(true);
+		}
+	}
+
+	// ===== GERAR CÓDIGO PIX COPIA E COLA =====
+	private String gerarCodigoPix() {
+
+		String valor =
+				txtValor
+						.getText()
+						.replace(",", ".");
+
+		String codigoPix =
+				"000201"
+				+ "26360014BR.GOV.BCB.PIX"
+				+ "0114cinelumi@email"
+				+ "52040000"
+				+ "5303986"
+				+ "5405" + valor
+				+ "5802BR"
+				+ "5910CINE LUMI"
+				+ "6009CURITIBA"
+				+ "62170513" + assento.replace(" ", "")
+				+ "6304ABCD";
+
+		return codigoPix;
+	}
+
+	// ===== COPIAR CÓDIGO PIX =====
+	private void copiarCodigoPix() {
+
+		String codigo =
+				txtCodigoPix.getText();
+
+		if (codigo == null || codigo.trim().isEmpty()) {
+
+			JOptionPane.showMessageDialog(
+					this,
+					"Nenhum código PIX gerado!"
+			);
+
+			return;
+		}
+
+		StringSelection selection =
+				new StringSelection(codigo);
+
+		Clipboard clipboard =
+				Toolkit
+						.getDefaultToolkit()
+						.getSystemClipboard();
+
+		clipboard.setContents(selection, null);
+
+		JOptionPane.showMessageDialog(
+				this,
+				"Código PIX copiado!"
+		);
+	}
+
 	// ===== FINALIZAR =====
 	private void finalizarPagamento() {
 
@@ -555,9 +718,21 @@ public class pagamento extends JFrame {
 
 				+ "Pagamento: "
 				+ comboPagamento.getSelectedItem()
-				+ "\n"
+				+ "\n";
 
-				+ "Valor: R$ "
+		if (comboPagamento.getSelectedItem().equals("Cartão")) {
+
+			relatorio +=
+					"Tipo do cartão: "
+					+ comboTipoCartao.getSelectedItem()
+					+ "\n"
+					+ "Parcelas: "
+					+ comboParcelas.getSelectedItem()
+					+ "\n";
+		}
+
+		relatorio +=
+				"Valor: R$ "
 				+ txtValor.getText();
 
 		JOptionPane.showMessageDialog(
