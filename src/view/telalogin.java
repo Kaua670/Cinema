@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.EventQueue;
+import java.awt.Image;
 import java.awt.Color;
 import java.awt.Font;
 
@@ -9,6 +10,8 @@ import javax.swing.*;
 import dao.UsuarioDAO;
 import dao.Banco;
 import Controle.SessaoUsuario;
+import javax.swing.JScrollPane;
+import java.awt.Dimension;
 
 public class telalogin extends JFrame {
 
@@ -43,6 +46,19 @@ public class telalogin extends JFrame {
 		fundo.setLayout(null);
 		setContentPane(fundo);
 
+		// Tamanho do painel para permitir rolagem
+		fundo.setPreferredSize(new Dimension(1920, 1200));
+
+		JScrollPane scrollPane = new JScrollPane(fundo);
+		scrollPane.setHorizontalScrollBarPolicy(
+		        JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scrollPane.setVerticalScrollBarPolicy(
+		        JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+
+		setContentPane(scrollPane);
+		
+
+
 		contentPane = fundo;
 
 		// 👤 USUÁRIO
@@ -54,7 +70,40 @@ public class telalogin extends JFrame {
 		// 🔒 SENHA
 		passwordField = new JPasswordField();
 		passwordField.setBounds(772, 455, 326, 40);
+		passwordField.setEchoChar('•');
 		contentPane.add(passwordField);
+		
+		// 👁️ BOTÃO MOSTRAR/OCULTAR SENHA
+		JButton btnOlho = new JButton();
+		btnOlho.setBounds(1105, 455, 40, 40);
+
+		// Ícone olho fechado inicial
+		ImageIcon olhoAberto = new ImageIcon(
+			    new ImageIcon("images/olho_aberto._24x24(1).png")
+			    .getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH)
+			);
+
+			ImageIcon olhoFechado = new ImageIcon(
+			    new ImageIcon("images/olho_fechado_24x24(1).png")
+			    .getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH)
+			);
+		
+
+		btnOlho.addActionListener(e -> {
+
+		    if (passwordField.getEchoChar() == (char) 0) {
+		        // Oculta senha
+		        passwordField.setEchoChar('•');
+		        btnOlho.setIcon(new ImageIcon("images/olho_fechado_24x24(1).png"));
+		        
+		    } else {
+		        // Mostra senha
+		        passwordField.setEchoChar((char) 0);
+		        btnOlho.setIcon(new ImageIcon("images/olho_aberto_24x24(1).png"));
+		    }
+		});
+
+		contentPane.add(btnOlho);
 
 		// 🔐 BOTÃO ENTRAR
 		JButton btnEntrar = new JButton("Entrar");

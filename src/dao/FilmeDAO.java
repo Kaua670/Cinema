@@ -1,6 +1,8 @@
 package dao;
 
 import java.sql.Connection;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -14,8 +16,7 @@ public class FilmeDAO {
                 new ArrayList<>();
 
         String sql =
-                "SELECT nome, classificacao, imagem FROM filmes";
-
+        	    "SELECT nome, classificacao, imagem, data_inicio FROM filmes";
         try (
                 Connection conn = Banco.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql);
@@ -40,7 +41,10 @@ public class FilmeDAO {
 
                         rs.getString("classificacao"),
 
-                        caminhoImagem
+                        caminhoImagem,
+                        
+                        rs.getString("data_inicio")
+                        
                 };
 
                 lista.add(filme);
@@ -61,21 +65,19 @@ public class FilmeDAO {
             String imagem
     ) {
 
-        String sql =
-                "INSERT INTO filmes(nome, classificacao, imagem) VALUES(?,?,?)";
+    	String sql =
+    		    "INSERT INTO filmes(nome, classificacao, imagem, data_inicio) VALUES(?,?,?,?)";
 
         try (
                 Connection conn = Banco.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)
         ) {
 
-            stmt.setString(1, nome);
-
-            stmt.setString(2, classificacao);
-
-            // salva somente o nome da imagem
-            stmt.setString(3, imagem);
-
+        	stmt.setString(1, nome);
+        	stmt.setString(2, classificacao);
+        	stmt.setString(3, imagem);
+        	stmt.setString(4, LocalDate.now().toString());
+        	
             stmt.executeUpdate();
 
         } catch (Exception e) {

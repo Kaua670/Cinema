@@ -79,10 +79,22 @@ public class Administrador extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		contentPane = new JPanel();
+		
+		// Tamanho da área rolável
+		contentPane.setPreferredSize(new Dimension(2500, 1500));
+
+		// Barra de rolagem
+		JScrollPane scrollPane = new JScrollPane(contentPane);
+
+		scrollPane.setVerticalScrollBarPolicy(
+		        JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+
+		scrollPane.setHorizontalScrollBarPolicy(
+		        JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
+		setContentPane(scrollPane);
 
 		contentPane.setLayout(null);
-
-		setContentPane(contentPane);
 
 		// ================= TÍTULO =================
 

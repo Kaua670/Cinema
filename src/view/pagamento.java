@@ -62,15 +62,29 @@ public class pagamento extends JFrame {
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		setBounds(100, 100, 1920, 1080);
+		setBounds(100, 100, 2560, 1250);
 
 		contentPane = new JPanel();
 
 		contentPane.setLayout(null);
 
 		contentPane.setBackground(Color.BLACK);
+		
+		contentPane = new JPanel();
+		contentPane.setLayout(null);
 
-		setContentPane(contentPane);
+		// área maior que a tela
+		contentPane.setPreferredSize(new Dimension(2560, 1400));
+
+		JScrollPane scrollPane = new JScrollPane(contentPane);
+
+		scrollPane.setVerticalScrollBarPolicy(
+		        JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+
+		scrollPane.setHorizontalScrollBarPolicy(
+		        JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
+		setContentPane(scrollPane);
 
 		// ===== FILME =====
 		JLabel lblFilme =
@@ -343,7 +357,7 @@ public class pagamento extends JFrame {
 		JButton btnVoltar =
 				new JButton("Voltar");
 
-		btnVoltar.setBounds(655, 965, 133, 43);
+		btnVoltar.setBounds(798, 800, 133, 43);
 
 		btnVoltar.addActionListener(e -> {
 
@@ -363,7 +377,7 @@ public class pagamento extends JFrame {
 		JButton btnImprimir =
 				new JButton("Imprimir");
 
-		btnImprimir.setBounds(655, 911, 133, 43);
+		btnImprimir.setBounds(798, 854, 133, 43);
 
 		btnImprimir.addActionListener(e -> {
 
@@ -434,6 +448,8 @@ public class pagamento extends JFrame {
 		);
 
 		bg.setBounds(-23, 0, 2560, 1250);
+		
+		
 
 		contentPane.add(bg);
 

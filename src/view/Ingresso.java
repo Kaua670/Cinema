@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.EventQueue;
+import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Cursor;
 import java.util.ArrayList;
@@ -49,6 +50,48 @@ public class Ingresso extends JFrame {
 		});
 
 		contentPane.add(btnVoltar);
+		
+		JButton btnRelatorio = new JButton("Meus Ingressos");
+		btnRelatorio.setBounds(150, 170, 150, 50);
+
+		btnRelatorio.addActionListener(e -> {
+
+		    String relatorio =
+		            dao.IngressoDAO.relatorioUsuario(
+		                    Controle.SessaoUsuario.usuarioLogado
+		            );
+
+		    JTextArea area = new JTextArea(relatorio);
+		    area.setEditable(false);
+
+		    JScrollPane scroll = new JScrollPane(area);
+		    
+
+		    area.setEditable(false);
+		    area.setLineWrap(true);
+		    area.setWrapStyleWord(true);
+
+		  
+		    scroll.setPreferredSize(
+		            new Dimension(600, 400)
+		    );
+
+		    JOptionPane.showMessageDialog(
+		            this,
+		            scroll,
+		            "Histórico de Compras",
+		            JOptionPane.INFORMATION_MESSAGE
+		    );
+
+		    JOptionPane.showMessageDialog(
+		            this,
+		            scroll,
+		            "Histórico de Compras",
+		            JOptionPane.INFORMATION_MESSAGE
+		    );
+		});
+
+		contentPane.add(btnRelatorio);
 
 		// ================= TÍTULO =================
 
@@ -88,18 +131,60 @@ public class Ingresso extends JFrame {
 		int margemY = 30;
 
 		int colunas = 5;
+		
+		java.time.LocalDate hoje =
+		        java.time.LocalDate.now();
+		
+		java.time.LocalDate inicioCatalogo =
+		        java.time.LocalDate.of(2026, 6, 10);
 
+		long diasSistema =
+		        java.time.temporal.ChronoUnit.DAYS
+		        .between(
+		                inicioCatalogo,
+		                java.time.LocalDate.now()
+		        );
+
+		int grupoAtual =
+		        (int)(diasSistema / 6);
+
+		// VOLTA PARA O INÍCIO QUANDO ACABAR OS FILMES
+		int quantidadeGrupos =
+		        (int)Math.ceil(filmes.size() / 2.0);
+
+		grupoAtual =
+		        grupoAtual % quantidadeGrupos;
 		for (int i = 0; i < filmes.size(); i++) {
 
-			String[] f = filmes.get(i);
+		    String[] f = filmes.get(i);
 
-			String nome = f[0];
-			String classificacao = f[1];
-			String imagem = f[2];
+		    int primeiroFilme = grupoAtual * 2;
+		    int ultimoFilme = primeiroFilme + 1;
 
-			if (imagem != null) {
-				imagem = imagem.replace("\\", "/");
+		    if (i < primeiroFilme || i > ultimoFilme) {
+		        continue;
+		    }
+
+		    String nome = f[0];
+		    String classificacao = f[1];
+		    String imagem = f[2];
+			String dataInicio = f[3];
+			System.out.println("Data recebida: " + dataInicio);
+			
+			java.time.LocalDate inicio;
+
+			if (dataInicio == null || dataInicio.isBlank()) {
+
+			    inicio = java.time.LocalDate.now();
+
+			} else {
+
+			    inicio = java.time.LocalDate.parse(dataInicio);
 			}
+
+			long dias =
+			        java.time.temporal.ChronoUnit.DAYS
+			        .between(inicio, hoje);
 
 			int coluna = i % colunas;
 			int linha = i / colunas;
@@ -162,6 +247,33 @@ public class Ingresso extends JFrame {
 			lblClass.setBounds(x, y + 255, 180, 25);
 			lblClass.setHorizontalAlignment(SwingConstants.CENTER);
 			painelFilmes.add(lblClass);
+			
+			long diasRestantes = 6 - dias;
+
+			JLabel lblDuracao =
+			        new JLabel(
+			                "Disponível por mais "
+			                + diasRestantes
+			                + " dia(s)"
+			        );
+
+			lblDuracao.setForeground(Color.YELLOW);
+			lblDuracao.setFont(
+			        new Font("Tahoma", Font.BOLD, 11)
+			);
+
+			lblDuracao.setBounds(
+			        x,
+			        y + 280,
+			        180,
+			        20
+			);
+
+			lblDuracao.setHorizontalAlignment(
+			        SwingConstants.CENTER
+			);
+
+			painelFilmes.add(lblDuracao);
 		}
 
 		// ================= AJUSTA ALTURA DO PAINEL CONFORME QUANTIDADE =================

@@ -1,6 +1,8 @@
 package view;
 
 import javax.swing.JFrame;
+import javax.swing.JScrollPane;
+import java.awt.Dimension;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -57,7 +59,19 @@ public class assento extends JFrame {
 
 		contentPane.setBackground(Color.BLACK);
 
-		setContentPane(contentPane);
+		// ÁREA MAIOR QUE A JANELA
+		contentPane.setPreferredSize(new Dimension(2200, 1400));
+
+		// SCROLL
+		JScrollPane scrollPane = new JScrollPane(contentPane);
+
+		scrollPane.setHorizontalScrollBarPolicy(
+		        JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
+		scrollPane.setVerticalScrollBarPolicy(
+		        JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+
+		setContentPane(scrollPane);
 
 		// ================= DEBUG =================
 

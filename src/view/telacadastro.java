@@ -23,6 +23,17 @@ public class telacadastro extends JFrame {
         JLabel fundo = new JLabel(new ImageIcon("images/galaxy_2560x1250.png"));
         fundo.setLayout(null);
         setContentPane(fundo);
+        
+     // Tamanho do painel para permitir rolagem
+     		fundo.setPreferredSize(new Dimension(1920, 1200));
+
+     		JScrollPane scrollPane = new JScrollPane(fundo);
+     		scrollPane.setHorizontalScrollBarPolicy(
+     		        JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+     		scrollPane.setVerticalScrollBarPolicy(
+     		        JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+
+     		setContentPane(scrollPane);
 
         contentPane = fundo;
 

@@ -165,4 +165,70 @@ public class IngressoDAO {
 
 		return lista;
 	}
+	public static String relatorioUsuario(String usuario) {
+
+	    StringBuilder sb = new StringBuilder();
+
+	    sb.append("===== MEUS INGRESSOS =====\n\n");
+	    sb.append("Cliente: ").append(usuario).append("\n\n");
+
+	    try {
+
+	        Connection con = Banco.conectar();
+
+	        String sql =
+	                "SELECT * FROM ingressos " +
+	                "WHERE usuario=?";
+
+	        PreparedStatement ps =
+	                con.prepareStatement(sql);
+
+	        ps.setString(1, usuario);
+
+	        ResultSet rs = ps.executeQuery();
+
+	        while (rs.next()) {
+
+	            sb.append("Filme: ")
+	              .append(rs.getString("filme"))
+	              .append("\n");
+
+	            sb.append("Sessão: ")
+	              .append(rs.getString("horario"))
+	              .append("\n");
+
+	            sb.append("Data: ")
+	              .append(rs.getString("data_sessao"))
+	              .append("\n");
+
+	            sb.append("Tipo: ")
+	              .append(rs.getString("tipo"))
+	              .append("\n");
+
+	            sb.append("Assento: ")
+	              .append(rs.getString("assento"))
+	              .append("\n");
+
+	            sb.append("Pagamento: ")
+	              .append(rs.getString("pagamento"))
+	              .append("\n");
+
+	            sb.append("Valor: R$ ")
+	              .append(rs.getString("valor"))
+	              .append("\n");
+
+	            sb.append("\n------------------------\n\n");
+	        }
+
+	        con.close();
+
+	    } catch (Exception e) {
+
+	        e.printStackTrace();
+
+	        return "Erro ao gerar relatório!";
+	    }
+
+	    return sb.toString();
+	}
 }
